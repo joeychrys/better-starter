@@ -26,8 +26,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
 .env
+.env.local
+.env*.local
+.env.*
 
 # vercel
 .vercel
@@ -43,7 +45,9 @@ sqlite.db
 better-auth_migrations
 
 # better auth schemas
-./src/db/schema.ts
+/src/db/schema.ts
+**/schema.ts
 
 # drizzle migrations
 src/drizzle/
+src/drizzle/*

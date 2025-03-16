@@ -1,9 +1,13 @@
 import { betterAuth } from "better-auth";
 import { admin, openAPI } from "better-auth/plugins";
-import Database from "better-sqlite3";
+import db from "@/db";
+import { nextCookies } from "better-auth/next-js";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 export const auth = betterAuth({
-    database: new Database("./sqlite.db"),
+    database: drizzleAdapter(db, {
+        provider: "sqlite",
+      }),
     emailAndPassword: {  
         enabled: true
     },
@@ -15,6 +19,7 @@ export const auth = betterAuth({
     },
     plugins: [
         openAPI(),
-        admin()
+        admin(),
+        nextCookies()
     ]
 })
