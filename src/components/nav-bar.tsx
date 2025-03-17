@@ -25,9 +25,15 @@ export default async function NavBar() {
     return (
         <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b shadow">
             <div className="max-w-screen-2xl mx-auto flex items-center justify-between p-4 h-16">
-                <Link href="/" className="flex items-center gap-2 ">
+                <div className="flex items-center space-x-4 text-sm text-primary/80">
                     <Lock strokeWidth={1.5} className="w-6 h-6" />
-                </Link>
+                    <Link href="/" className="hover:underline underline-offset-4">
+                        Home
+                    </Link>
+                    <Link href="/dashboard" className="hover:underline underline-offset-4">
+                        Dashboard
+                    </Link>
+                </div>
                 <div className="flex items-center space-x-4">
                     {session ? (
                         <Suspense fallback={<div className="w-8 h-8 rounded-full bg-muted animate-pulse" />}>

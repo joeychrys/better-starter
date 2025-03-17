@@ -1,6 +1,6 @@
 "use client"
 
-import { Shield, User } from "lucide-react"
+import { Shield, User, Landmark } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
@@ -42,6 +42,13 @@ function AccountNav() {
                 icon={<Shield className="mr-2 h-4 w-4" />}
             >
                 Security
+            </NavItem>
+            <NavItem
+                href="/account/billing"
+                active={pathname === "/account/billing"}
+                icon={<Landmark className="mr-2 h-4 w-4" />}
+            >
+                Billing
             </NavItem>
         </nav>
     )
