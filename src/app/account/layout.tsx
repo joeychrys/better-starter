@@ -4,12 +4,14 @@ import { Shield, User, Landmark } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
+import { Toaster } from "sonner"
 
 export default function AccountLayout({ children }: { children: ReactNode }) {
+
     return (
-        <div className="container max-w-6xl mx-auto py-8">
+        <div className="container max-w-6xl mx-auto p-8">
             <div className="flex flex-col md:flex-row gap-8">
-                <aside className="w-full md:w-64 shrink-0 md:border-r md:pr-6">
+                <aside className="w-full md:w-64 shrink-0 md:border-r md:pr-6 border-b md:border-b-0">
                     <div className="mb-6">
                         <h1 className="text-2xl font-bold">Account</h1>
                         <p className="text-muted-foreground text-sm">Manage your account info.</p>
@@ -18,6 +20,7 @@ export default function AccountLayout({ children }: { children: ReactNode }) {
                 </aside>
                 <main className="flex-1 max-w-3xl mx-auto w-full md:pl-6">
                     {children}
+                    <Toaster />
                 </main>
             </div>
         </div>

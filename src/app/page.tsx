@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Code, Database, Lock, Palette, Zap } from 'lucide-react';
 import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-16">
       {/* Hero Section */}

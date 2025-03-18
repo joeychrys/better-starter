@@ -59,7 +59,7 @@ export const SignInFormSchema = z
         password: passwordSchema,
     })
 
-export const NameChangeFormSchema = z
+export const UsernameFormSchema = z
     .object({
         name: nameSchema,
     })
