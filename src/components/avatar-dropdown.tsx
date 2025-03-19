@@ -22,7 +22,6 @@ export default function AvatarDropdown(props: {
     const { data, isPending } = client.useSession();
     const session = data || props.session
 
-
     // If no user is found, don't render the dropdown
     if (!session) return null;
     const user = session.user
