@@ -52,6 +52,18 @@ export default function BillingPage() {
         }
     }
 
+    const handleCustomerPortal = async () => {
+        try {
+            await authClient.subscription.portal({
+                returnUrl: "/account/billing",
+            })
+
+            // Redirect to Stripe portal will happen automatically
+        } catch (error) {
+            console.error("Failed to initiate cancellation:", error)
+        }
+    }
+
     const handleChangePlan = async () => {
         // Redirect to pricing page
         window.location.href = "/pricing"
@@ -172,6 +184,7 @@ export default function BillingPage() {
                     </CardContent>
                     <CardFooter>
                         <div className="flex flex-col xs:flex-row gap-2 w-full">
+                            <Button variant="outline" size="sm" className="w-full" onClick={handleCustomerPortal}>Manage Subscription</Button>
                             <Button variant="outline" size="sm" className="w-full" onClick={handleChangePlan}>Change Plan</Button>
                             <Button
                                 variant="outline"

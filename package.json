@@ -12,7 +12,7 @@
     "lint:fix": "eslint --fix \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
-    "@better-auth/stripe": "^1.2.4",
+    "@better-auth/stripe": "file:../better-auth/packages/stripe",
     "@hookform/resolvers": "^4.1.2",
     "@libsql/client": "^0.14.0",
     "@radix-ui/react-alert-dialog": "^1.1.6",
