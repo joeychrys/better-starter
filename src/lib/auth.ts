@@ -1,8 +1,12 @@
-import { betterAuth } from "better-auth";
-import { admin, openAPI } from "better-auth/plugins";
 import db from "@/db";
-import { nextCookies } from "better-auth/next-js";
+import { stripe } from "@better-auth/stripe";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { nextCookies } from "better-auth/next-js";
+import { admin, openAPI } from "better-auth/plugins";
+import Stripe from "stripe";
+
+const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
@@ -20,6 +24,23 @@ export const auth = betterAuth({
     plugins: [
         openAPI(),
         admin(),
-        nextCookies()
+        nextCookies(),
+        stripe({
+            stripeClient,
+            stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+            createCustomerOnSignUp: true,
+            subscription: {
+                enabled: true,
+                plans: async () => {
+                    const plans = await db.query.plan.findMany({
+                        where: (plan, { eq }) => eq(plan.type, "dev")
+                    });
+                    return plans.map(plan => ({
+                        name: plan.name,
+                        priceId: plan.priceId || undefined,
+                    }));
+                }
+            }
+        })
     ]
 })

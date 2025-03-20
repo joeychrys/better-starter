@@ -101,7 +101,9 @@ export const getColumns = (
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
-                                    onClick={() => handleImpersonateUser(user.id)}
+                                    onClick={() => handleImpersonateUser(user.id).then(() => {
+                                        window.location.reload();
+                                    })}
                                     disabled={isLoading?.startsWith("impersonate")}
                                 >
                                     <UserCircle className="h-4 w-4 mr-2" />
