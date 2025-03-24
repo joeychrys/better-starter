@@ -5,6 +5,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin, openAPI } from "better-auth/plugins";
 import Stripe from "stripe";
+import { stripePlansPlugin } from "@/plugins/stripe-plans";
 
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -25,6 +26,7 @@ export const auth = betterAuth({
         openAPI(),
         admin(),
         nextCookies(),
+        stripePlansPlugin(),
         stripe({
             stripeClient,
             stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
