@@ -1,4 +1,4 @@
-import { GoogleIcon } from "@/app/(auth)/sign-in/page";
+import { GoogleIcon } from "@/components/icons/google-icon"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserAccounts } from "@/lib/types";
 import { SatelliteDish } from "lucide-react";

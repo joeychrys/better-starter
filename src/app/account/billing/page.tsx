@@ -138,6 +138,9 @@ export default function BillingPage() {
                             <div className="flex items-center gap-2">
                                 <Package className="h-5 w-5" />
                                 <CardTitle className="text-lg font-medium capitalize">{subscription.plan} Plan</CardTitle>
+                                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                                    {subscription?.limits?.tokens || 0}
+                                </Badge>
                             </div>
                             <Badge variant="outline" className={
                                 subscription.status === "active" ? "bg-green-50 text-green-700 border-green-200" :

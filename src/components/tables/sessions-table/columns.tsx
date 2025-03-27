@@ -6,8 +6,6 @@ import { Laptop, Smartphone } from "lucide-react"
 import { UAParser } from "ua-parser-js"
 
 
-
-
 export const columns: ColumnDef<Session["session"]>[] = [
     {
         header: "Device",

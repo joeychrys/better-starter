@@ -6,7 +6,7 @@ import { nextCookies } from "better-auth/next-js";
 import { admin, openAPI } from "better-auth/plugins";
 import Stripe from "stripe";
 import { stripePlansPlugin } from "@/plugins/stripe-plans";
-
+import { routeProtectionPlugin } from "@/plugins/route-protection/server";
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export const auth = betterAuth({
@@ -27,6 +27,7 @@ export const auth = betterAuth({
         admin(),
         nextCookies(),
         stripePlansPlugin(),
+        routeProtectionPlugin(),
         stripe({
             stripeClient,
             stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
@@ -40,6 +41,7 @@ export const auth = betterAuth({
                     return plans.map(plan => ({
                         name: plan.name,
                         priceId: plan.priceId || undefined,
+                        limits: JSON.parse(plan.limits || "{}") as Record<string, number>,
                     }));
                 }
             }

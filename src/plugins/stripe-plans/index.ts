@@ -5,7 +5,7 @@ export const stripePlansPlugin = () => (
     {
         id: "stripe-plans",
         schema: {
-            plans: {
+            plan: {
                 fields: {
                     type:{
                         type: "string",

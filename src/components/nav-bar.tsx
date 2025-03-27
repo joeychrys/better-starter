@@ -30,9 +30,6 @@ export default async function NavBar() {
                     <Link href="/" className="hover:underline underline-offset-4">
                         Home
                     </Link>
-                    <Link href="/dashboard" className="hover:underline underline-offset-4">
-                        Dashboard
-                    </Link>
                     <Link href="/pricing" className="hover:underline underline-offset-4">
                         Pricing
                     </Link>

@@ -1,33 +1,17 @@
-import type { auth } from "@/lib/auth";
-import { betterFetch } from "@better-fetch/fetch";
-import { NextRequest, NextResponse } from "next/server";
- 
-type Session = typeof auth.$Infer.Session;
- 
-export async function middleware(request: NextRequest) {
-	const { data: session } = await betterFetch<Session>("/api/auth/get-session", {
-		baseURL: request.nextUrl.origin,
-		headers: {
-			cookie: request.headers.get("cookie") || "", // Forward the cookies from the request
-		},
-	});
- 
-	// Check if the user is authenticated
-	if (!session) {
-		return NextResponse.redirect(new URL("/sign-in", request.url));
-	}
- 
-	// Check if the user is trying to access the admin page
-	if (request.nextUrl.pathname.startsWith('/admin')) {
-		// If the user is not an admin, redirect to dashboard
-		if (session.user?.role !== 'admin') {
-			return NextResponse.redirect(new URL("/", request.url));
-		}
-	}
- 
-	return NextResponse.next();
-}
- 
+import { routeProtectionMiddleware } from "@/plugins/route-protection/middleware";
+
+export const middleware = routeProtectionMiddleware;
+
 export const config = {
-	matcher: ["/dashboard", "/admin(.*)", "/account(.*)"], // Apply middleware to dashboard and all admin routes
+	matcher: [
+		/*
+		 * Match all request paths except for the ones starting with:
+		 * - api (API routes)
+		 * - _next/static (static files)
+		 * - _next/image (image optimization files)
+		 * - favicon.ico (favicon file)
+		 * - public folder
+		 */
+		"/((?!api|_next/static|_next/image|favicon.ico|public).*)",
+	],
 };
