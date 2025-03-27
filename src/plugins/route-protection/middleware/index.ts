@@ -14,7 +14,7 @@ export async function routeProtectionMiddleware(request: NextRequest) {
   if (
     path.startsWith("/_next") ||
     path.startsWith("/static") ||
-    path.startsWith("/api") ||
+    path.startsWith("/api/auth") ||
     path.includes(".")
   ) {
     return NextResponse.next();
