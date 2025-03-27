@@ -7,13 +7,14 @@ import { admin, openAPI } from "better-auth/plugins";
 import Stripe from "stripe";
 import { stripePlansPlugin } from "@/plugins/stripe-plans";
 import { routeProtectionPlugin } from "@/plugins/route-protection/server";
+
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "sqlite",
-      }),
-    emailAndPassword: {  
+    }),
+    emailAndPassword: {
         enabled: true
     },
     socialProviders: {
@@ -43,8 +44,15 @@ export const auth = betterAuth({
                         priceId: plan.priceId || undefined,
                         limits: JSON.parse(plan.limits || "{}") as Record<string, number>,
                     }));
+                },
+                getCheckoutSessionParams: async ({ user, session, plan, subscription }, request) => {
+                    return {
+                        params: {
+                            payment_method_types: ["card"],
+                        },
+                    };
                 }
-            }
+            },
         })
     ]
 })
