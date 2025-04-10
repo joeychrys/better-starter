@@ -49,3 +49,12 @@ better-auth_migrations
 # drizzle migrations
 src/drizzle/
 src/drizzle/*
+
+# nix
+shell.nix
+.nix-channels
+.nix-defexpr
+.nix-profile
+.nix-store
+.nix-trust
+
