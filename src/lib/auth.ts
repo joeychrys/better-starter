@@ -11,8 +11,8 @@ const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!)
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "sqlite",
-      }),
-    emailAndPassword: {  
+    }),
+    emailAndPassword: {
         enabled: true
     },
     socialProviders: {
@@ -33,14 +33,14 @@ export const auth = betterAuth({
                 enabled: true,
                 plans: async () => {
                     const plans = await db.query.plan.findMany({
-                        where: (plan, { eq }) => eq(plan.type, "dev")
+                        where: (plan: any, { eq }: { eq: any }) => eq(plan.type, "dev")
                     });
-                    return plans.map(plan => ({
+                    return plans.map((plan: any) => ({
                         name: plan.name,
                         priceId: plan.priceId || undefined,
                     }));
                 }
             }
-        })
+        }),
     ]
 })

@@ -44,7 +44,6 @@ better-auth_migrations
 
 # better auth schemas
 /src/db/schema.ts
-**/schema.ts
 
 # drizzle migrations
 src/drizzle/
