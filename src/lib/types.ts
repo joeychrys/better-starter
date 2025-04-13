@@ -10,3 +10,9 @@ export type UserAccounts = {
     accountId: string;
     scopes: string[];
 }[];
+
+// Represents a route object with roles as a string array (application/API format)
+export interface ProtectedRoute {
+    path?: string;
+    roles?: string[];
+}

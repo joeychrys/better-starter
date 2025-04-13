@@ -44,8 +44,16 @@ better-auth_migrations
 
 # better auth schemas
 /src/db/schema.ts
-**/schema.ts
 
 # drizzle migrations
 src/drizzle/
 src/drizzle/*
+
+# nix
+shell.nix
+.nix-channels
+.nix-defexpr
+.nix-profile
+.nix-store
+.nix-trust
+
