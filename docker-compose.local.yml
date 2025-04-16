@@ -1,0 +1,36 @@
+volumes:
+  local_postgres_data: {}
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: local_postgres
+    container_name: local_postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.local/.postgres
+    ports:
+      - '5432:5432'
+
+  next-app:
+    build:
+      context: .
+      target: dev
+      dockerfile: ./compose/local/node/Dockerfile
+    restart: always
+    command: npm run dev
+    image: local_next_app
+    container_name: local_next_app
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ./.envs/.local/.next
+    volumes:
+      - ./next-app:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - '3000:3000'
