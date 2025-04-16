@@ -45,10 +45,6 @@ better-auth_migrations
 # better auth schemas
 /src/db/schema.ts
 
-# drizzle migrations
-src/drizzle/
-src/drizzle/*
-
 # nix
 shell.nix
 .nix-channels
