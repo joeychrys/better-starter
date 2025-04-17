@@ -36,9 +36,6 @@ export default async function NavBar() {
                     <Link href="/pricing" className="hover:underline underline-offset-4">
                         Pricing
                     </Link>
-                    <Link href="/agents" className="hover:underline underline-offset-4">
-                        Agents
-                    </Link>
                 </div>
                 <div className="flex items-center space-x-4">
                     {session ? (
