@@ -17,6 +17,14 @@ export default function Pricing() {
         })
     }
 
+    const handleProPlan = async () => {
+        await authClient.subscription.upgrade({
+            plan: "pro",
+            successUrl: "/dashboard",
+            cancelUrl: "/pricing",
+        })
+    }
+
 
     return (
         <div className="container py-20 px-5 mx-auto">
@@ -64,7 +72,7 @@ export default function Pricing() {
                         <CardTitle className="text-2xl">Pro</CardTitle>
                         <CardDescription className="pt-1.5">For growing businesses and teams</CardDescription>
                         <div className="mt-4 flex items-end">
-                            <span className="text-4xl font-bold">$100</span>
+                            <span className="text-4xl font-bold">$80</span>
                             <span className="text-muted-foreground ml-1.5 pb-1">/month</span>
                         </div>
                     </CardHeader>
@@ -82,11 +90,7 @@ export default function Pricing() {
                     </CardContent>
 
                     <CardFooter className="pt-6">
-                        <Button className="w-full bg-primary" onClick={() => authClient.subscription.upgrade({
-                            plan: "pro",
-                            successUrl: "/dashboard",
-                            cancelUrl: "/pricing",
-                        })}>
+                        <Button className="w-full bg-primary" onClick={handleProPlan}>
                             Get Started
                         </Button>
                     </CardFooter>

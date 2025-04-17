@@ -5,7 +5,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin, openAPI } from "better-auth/plugins";
 import Stripe from "stripe";
-
+import { stripePlans } from "./stripe-plans";
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export const auth = betterAuth({
@@ -31,15 +31,7 @@ export const auth = betterAuth({
             createCustomerOnSignUp: true,
             subscription: {
                 enabled: true,
-                plans: async () => {
-                    const plans = await db.query.plan.findMany({
-                        where: (plan: any, { eq }: { eq: any }) => eq(plan.type, "dev")
-                    });
-                    return plans.map((plan: any) => ({
-                        name: plan.name,
-                        priceId: plan.priceId || undefined,
-                    }));
-                }
+                plans: stripePlans
             }
         }),
     ]
