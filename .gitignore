@@ -55,3 +55,6 @@ shell.nix
 
 # .envs
 .envs/.local/.next
+
+# stripe plans
+next-app/src/lib/stripe-plans.ts

@@ -1,0 +1,10 @@
+export const stripePlans = [
+    {
+        name: "",
+        priceId: "",
+    },
+    {
+        name: "",
+        priceId: "",
+    },  
+];
