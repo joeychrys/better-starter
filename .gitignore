@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+/next-app/node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -10,11 +10,11 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+/next-app/.next/
+/next-app/out/
 
 # production
-/build
+/next-app/build
 
 # misc
 .DS_Store
@@ -45,10 +45,6 @@ better-auth_migrations
 # better auth schemas
 /src/db/schema.ts
 
-# drizzle migrations
-src/drizzle/
-src/drizzle/*
-
 # nix
 shell.nix
 .nix-channels
@@ -57,3 +53,5 @@ shell.nix
 .nix-store
 .nix-trust
 
+# .envs
+.envs/.local/.next

@@ -1,0 +1,20 @@
+services:
+  next-app:
+    build:
+      context: .
+      target: dev
+      dockerfile: ./compose/local/node/Dockerfile
+    restart: always
+    command: npm run dev
+    image: local_next_app
+    container_name: local_next_app
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ./.envs/.local/.next
+    volumes:
+      - ./next-app:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - '3000:3000'
