@@ -1,10 +1,12 @@
 "use client"
 
+import { Fingerprint } from "lucide-react";
+
 import { columns } from "@/components/tables/sessions-table/columns";
 import { DataTable } from "@/components/tables/sessions-table/data-table";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Session } from "@/lib/types";
-import { Fingerprint } from "lucide-react";
+
 import RevokeSessionsDialog from "./dialogs/revoke-sessions-dialog";
 
 export default function SessionsCard(props: {

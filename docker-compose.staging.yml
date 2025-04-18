@@ -1,0 +1,13 @@
+
+services:
+  next-app:
+    build:
+      context: .
+      dockerfile: ./compose/staging/node/Dockerfile
+    image: staging_next_app
+    command: node server.js
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    ports:
+      - '3000:3000'

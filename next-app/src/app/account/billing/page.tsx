@@ -1,5 +1,9 @@
 "use client"
 
+import { Subscription } from "@better-auth/stripe"
+import { BarChart3, CalendarDays, Check, Package } from "lucide-react"
+import { useEffect, useState } from "react"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,12 +15,10 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { authClient } from "@/lib/auth-client"
-import { BarChart3, CalendarDays, Check, Package } from "lucide-react"
-import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 
 export default function BillingPage() {
-    const [subscription, setSubscription] = useState<any>(null)
+    const [subscription, setSubscription] = useState<Subscription | null>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -101,7 +103,7 @@ export default function BillingPage() {
                 <div>
                     <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
                     <p className="text-sm text-muted-foreground">
-                        You don't have an active subscription.
+                        You don&apos;t have an active subscription.
                     </p>
                 </div>
 
@@ -111,7 +113,7 @@ export default function BillingPage() {
                         <CardDescription>Choose a plan to get started</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p>You currently don't have an active subscription. Select a plan to access premium features.</p>
+                        <p>You currently don&apos;t have an active subscription. Select a plan to access premium features.</p>
                     </CardContent>
                     <CardFooter>
                         <Button onClick={handleChangePlan}>View Plans</Button>

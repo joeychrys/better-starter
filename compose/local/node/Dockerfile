@@ -9,20 +9,8 @@ COPY ./next-app/package.json ./
 COPY ./next-app/package-lock.json ./
 RUN npm ci
 
-FROM base as dev
+FROM base AS dev
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY ./next-app ./
-
-#rebuild the source code only when needed
-FROM base AS builder
-
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY ./next-app ./
-
-#disable telemetry
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN npm run build

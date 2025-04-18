@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -10,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -52,8 +52,12 @@ export default function NameChangeDialog() {
             toast.success("Profile updated successfully")
             router.refresh() // Refresh the page to show the updated profile
             setDialogOpen(false)
-        } catch (error: any) {
-            toast.error(`Error: ${error.message || "Failed to update profile"}`)
+        } catch (error: unknown) {
+            let errorMessage = "Failed to update profile";
+            if (error instanceof Error) {
+                errorMessage = `Error: ${error.message}`;
+            }
+            toast.error(errorMessage);
         }
     }
     return (

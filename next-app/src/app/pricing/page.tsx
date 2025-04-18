@@ -1,11 +1,12 @@
 "use client"
 
+import { Check } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
 
 export default function Pricing() {
 
@@ -130,7 +131,7 @@ export default function Pricing() {
             <div className="mt-20 text-center">
                 <h3 className="text-xl font-semibold mb-4">Need something specific?</h3>
                 <p className="mb-8 text-muted-foreground max-w-2xl mx-auto">
-                    Contact our sales team to customize a plan that perfectly fits your organization's requirements.
+                    Contact our sales team to customize a plan that perfectly fits your organization&apos;s requirements.
                 </p>
                 <Button variant="outline" size="lg">
                     Schedule a Demo

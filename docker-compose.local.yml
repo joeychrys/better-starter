@@ -4,7 +4,6 @@ services:
       context: .
       target: dev
       dockerfile: ./compose/local/node/Dockerfile
-    restart: always
     command: npm run dev
     image: local_next_app
     container_name: local_next_app

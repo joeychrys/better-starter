@@ -1,7 +1,9 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { KeyRound } from "lucide-react"
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
 import PasswordChangeDialog from "./dialogs/password-change-dialog"
 
 export default function PasswordCard() {

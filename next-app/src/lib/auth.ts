@@ -1,10 +1,12 @@
-import db from "@/db";
 import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin, openAPI } from "better-auth/plugins";
 import Stripe from "stripe";
+
+import db from "@/db";
+
 import { stripePlans } from "./stripe-plans";
 const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!)
 

@@ -1,11 +1,12 @@
 "use client"
 
+import { User } from "lucide-react"
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { User } from "lucide-react"
-
 import { Session } from "@/lib/types"
+
 import NameChangeDialog from "./dialogs/name-change-dialog"
 
 export default function ProfileCard(props: {
