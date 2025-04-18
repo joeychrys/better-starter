@@ -1,3 +1,11 @@
+import { useQueryClient } from "@tanstack/react-query"
+import { OnChangeFn, PaginationState } from "@tanstack/react-table"
+import { format } from "date-fns"
+import { CalendarIcon, Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -7,13 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { authClient as client } from "@/lib/auth-client"
 import { User } from "@/lib/types"
 import { cn } from "@/lib/utils"
-import { useQueryClient } from "@tanstack/react-query"
-import { OnChangeFn, PaginationState } from "@tanstack/react-table"
-import { format } from "date-fns"
-import { CalendarIcon, Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { toast } from "sonner"
+
 import { getColumns } from "./columns"
 import { DataTable } from "./data-table"
 
@@ -54,8 +56,12 @@ export function TableCard({ data, totalRows, pagination, onPaginationChange }: T
             await client.admin.removeUser({ userId: id });
             toast.success("User deleted successfully");
             invalidateUserQueries();
-        } catch (error: any) {
-            toast.error(error.message || "Failed to delete user");
+        } catch (error: unknown) {
+            let errorMessage = "Failed to delete user";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(undefined);
         }
@@ -66,8 +72,12 @@ export function TableCard({ data, totalRows, pagination, onPaginationChange }: T
         try {
             await client.admin.revokeUserSessions({ userId: id });
             toast.success("Sessions revoked for user");
-        } catch (error: any) {
-            toast.error(error.message || "Failed to revoke sessions");
+        } catch (error: unknown) {
+            let errorMessage = "Failed to revoke sessions";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(undefined);
         }
@@ -79,8 +89,12 @@ export function TableCard({ data, totalRows, pagination, onPaginationChange }: T
             await client.admin.impersonateUser({ userId: id });
             toast.success("Impersonated user");
             router.push("/");
-        } catch (error: any) {
-            toast.error(error.message || "Failed to impersonate user");
+        } catch (error: unknown) {
+            let errorMessage = "Failed to impersonate user";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(undefined);
         }
@@ -103,8 +117,12 @@ export function TableCard({ data, totalRows, pagination, onPaginationChange }: T
             });
             invalidateUserQueries();
             toast.success("User unbanned successfully");
-        } catch (error: any) {
-            toast.error(error.message || "Failed to unban user");
+        } catch (error: unknown) {
+            let errorMessage = "Failed to unban user";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(undefined);
         }
@@ -125,8 +143,12 @@ export function TableCard({ data, totalRows, pagination, onPaginationChange }: T
             toast.success("User banned successfully");
             setIsBanDialogOpen(false);
             invalidateUserQueries();
-        } catch (error: any) {
-            toast.error(error.message || "Failed to ban user");
+        } catch (error: unknown) {
+            let errorMessage = "Failed to ban user";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(undefined);
         }

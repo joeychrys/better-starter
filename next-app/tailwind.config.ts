@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import tailwindcssMotion from 'tailwindcss-motion';
 
 const config: Config = {
   darkMode: ['class'],
@@ -62,6 +63,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-motion')],
+  plugins: [tailwindcssMotion],
 };
 export default config;

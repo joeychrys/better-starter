@@ -1,7 +1,8 @@
-import { GoogleIcon } from "@/app/(auth)/sign-in/page";
+import { SatelliteDish } from "lucide-react";
+
+import { GoogleIcon } from "@/components/icons/google-icon";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserAccounts } from "@/lib/types";
-import { SatelliteDish } from "lucide-react";
 
 export default function LinkedAccountsCard({ userAccounts }: { userAccounts: UserAccounts }) {
     // Convert provider string to proper case

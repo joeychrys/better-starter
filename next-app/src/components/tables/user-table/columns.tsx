@@ -1,11 +1,12 @@
 "use client"
 
+import { ColumnDef } from "@tanstack/react-table"
+import { Key, LockIcon, MoreHorizontal, Shield, Trash, UserCircle } from "lucide-react"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { User } from "@/lib/types"
-import { ColumnDef } from "@tanstack/react-table"
-import { Key, LockIcon, MoreHorizontal, Shield, Trash, UserCircle } from "lucide-react"
 
 // This is a client component, but columns need to be defined outside the component
 // We'll create a function that returns the columns with the necessary handlers

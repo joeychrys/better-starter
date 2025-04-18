@@ -1,6 +1,7 @@
-import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+
+import { auth } from "@/lib/auth";
 
 import EmailCard from "./components/email-card";
 import PasswordCard from "./components/password-card";

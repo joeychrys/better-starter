@@ -1,8 +1,9 @@
+import { CheckCircle, Code, Database, Lock, Palette, Zap } from 'lucide-react';
+import Link from 'next/link';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Code, Database, Lock, Palette, Zap } from 'lucide-react';
-import Link from 'next/link';
 
 export default async function Home() {
   return (

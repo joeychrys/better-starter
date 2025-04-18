@@ -1,22 +1,21 @@
 "use client"
 
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { PaginationState } from "@tanstack/react-table"
+import { Loader2, Plus, Shield, Users } from "lucide-react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+
 import { TableCard } from "@/components/tables/user-table/table-card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { authClient as client } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client"
 import { User } from "@/lib/types"
 import { useDebounce } from "@/lib/use-debounce"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { AlertCircle, Loader2, Plus, Shield, Users } from "lucide-react"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
 
 interface UsersResponse {
     users: User[];
@@ -26,9 +25,18 @@ interface UsersResponse {
 
 type UserRole = "admin" | "user";
 
+interface UserQueryParams {
+    limit: number;
+    offset: number;
+    sortBy: string;
+    sortDirection: "asc" | "desc";
+    searchField?: "name" | "email";
+    searchOperator?: "contains" | "starts_with" | "ends_with";
+    searchValue?: string;
+}
+
 export default function AdminPage() {
     const queryClient = useQueryClient();
-    const [activeTab, setActiveTab] = useState("users");
 
     // Add User state
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -41,20 +49,17 @@ export default function AdminPage() {
     const [isLoading, setIsLoading] = useState<string | undefined>();
 
     // Pagination state
-    const [pagination, setPagination] = useState({
-        pageIndex: 0, // 0-based index
-        pageSize: 5,
-    });
+    const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
     // Derived values for convenience
-    const currentPage = pagination.pageIndex + 1; // Convert to 1-based for display
-    const [totalPages, setTotalPages] = useState(1);
     const [totalUsers, setTotalUsers] = useState(0);
 
     // Search state
     const [searchTerm, setSearchTerm] = useState("");
-    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    const [searchField] = useState<"name" | "email">("name");
+    const [searchOperator] = useState<"contains" | "starts_with" | "ends_with">("contains");
     const [isSearching, setIsSearching] = useState(false);
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     // Reset to first page when search changes
     useEffect(() => {
@@ -68,7 +73,7 @@ export default function AdminPage() {
             try {
                 setIsSearching(!!debouncedSearchTerm);
 
-                const queryParams: any = {
+                const queryParams: UserQueryParams = {
                     limit: pagination.pageSize,
                     offset: pagination.pageIndex * pagination.pageSize, // 0-based index * pageSize
                     sortBy: "createdAt",
@@ -77,12 +82,12 @@ export default function AdminPage() {
 
                 // Add search parameters if there's a search term
                 if (debouncedSearchTerm) {
-                    queryParams.searchField = "email";
-                    queryParams.searchOperator = "contains";
+                    queryParams.searchField = searchField;
+                    queryParams.searchOperator = searchOperator;
                     queryParams.searchValue = debouncedSearchTerm;
                 }
 
-                const data = await client.admin.listUsers(
+                const data = await authClient.admin.listUsers(
                     {
                         query: queryParams
                     },
@@ -94,12 +99,15 @@ export default function AdminPage() {
                 // Update pagination state
                 if (data) {
                     setTotalUsers(data.total || 0);
-                    setTotalPages(Math.ceil((data.total || 0) / pagination.pageSize));
                 }
 
                 return data as UsersResponse;
-            } catch (error: any) {
-                toast.error(error.message || "Failed to fetch users");
+            } catch (error: unknown) {
+                let errorMessage = "Failed to fetch users";
+                if (error instanceof Error) {
+                    errorMessage = error.message;
+                }
+                toast.error(errorMessage);
                 return { users: [], total: 0, limit: 0 } as UsersResponse;
             } finally {
                 setIsSearching(false);
@@ -107,68 +115,11 @@ export default function AdminPage() {
         },
     });
 
-    // Admin count query
-    const { data: adminCountData } = useQuery<UsersResponse>({
-        queryKey: ["users-admin-count"],
-        queryFn: async () => {
-            try {
-                const data = await client.admin.listUsers(
-                    {
-                        query: {
-                            limit: 1,
-                            filterField: "role",
-                            filterOperator: "eq",
-                            filterValue: "admin",
-                        }
-                    },
-                    {
-                        throw: true,
-                    },
-                );
-                return data as UsersResponse;
-            } catch (error: any) {
-                console.error("Failed to fetch admin count:", error);
-                return { users: [], total: 0, limit: 0 } as UsersResponse;
-            }
-        },
-        staleTime: 5 * 60 * 1000, // 5 minutes
-    });
-
-    // Banned count query
-    const { data: bannedCountData } = useQuery<UsersResponse>({
-        queryKey: ["users-banned-count"],
-        queryFn: async () => {
-            try {
-                const data = await client.admin.listUsers(
-                    {
-                        query: {
-                            limit: 1,
-                            filterField: "banned",
-                            filterOperator: "eq",
-                            filterValue: true,
-                        }
-                    },
-                    {
-                        throw: true,
-                    },
-                );
-                return data as UsersResponse;
-            } catch (error: any) {
-                console.error("Failed to fetch banned count:", error);
-                return { users: [], total: 0, limit: 0 } as UsersResponse;
-            }
-        },
-        staleTime: 5 * 60 * 1000, // 5 minutes
-    });
-
-    const adminCount = adminCountData?.total || 0;
-    const bannedCount = bannedCountData?.total || 0;
-
     const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading("create");
         try {
-            await client.admin.createUser({
+            await authClient.admin.createUser({
                 email: newUser.email,
                 password: newUser.password,
                 name: newUser.name,
@@ -187,8 +138,12 @@ export default function AdminPage() {
             queryClient.invalidateQueries({
                 queryKey: ["users-banned-count"],
             });
-        } catch (error: any) {
-            toast.error(error.message || "Failed to create user");
+        } catch (error: unknown) {
+            let errorMessage = "Failed to create user";
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            toast.error(errorMessage);
         } finally {
             setIsLoading(undefined);
         }
@@ -197,6 +152,24 @@ export default function AdminPage() {
     const handleClearSearch = () => {
         setSearchTerm("");
     }
+
+
+    useEffect(() => {
+        const queryParams: UserQueryParams = {
+            limit: pagination.pageSize,
+            offset: pagination.pageIndex * pagination.pageSize, // 0-based index * pageSize
+            sortBy: "createdAt",
+            sortDirection: "desc",
+        };
+
+        if (debouncedSearchTerm && searchField && searchOperator) {
+            queryParams.searchValue = debouncedSearchTerm;
+            queryParams.searchField = searchField;
+            queryParams.searchOperator = searchOperator;
+        }
+
+        queryClient.invalidateQueries({ queryKey: ["users", pagination.pageIndex, pagination.pageSize, debouncedSearchTerm] });
+    }, [pagination, queryClient, debouncedSearchTerm, searchField, searchOperator]);
 
     return (
         <div className="container mx-auto p-6 space-y-8 max-w-7xl">
@@ -304,145 +277,47 @@ export default function AdminPage() {
                 </Dialog>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-muted-foreground">
-                            Total Users
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+            {/* User Management Card */}
+            <Card>
+                <CardHeader className="pb-0">
+                    <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                        <CardTitle>User Management</CardTitle>
+                    </div>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-6">
+                    {/* Search bar */}
+                    <div className="flex flex-col gap-4">
                         <div className="flex items-center justify-between">
-                            <div className="text-2xl font-bold">
-                                {isUsersLoading ? (
-                                    <Skeleton className="h-8 w-16" />
-                                ) : (
-                                    totalUsers
+                            <div className="flex items-center gap-2">
+                                <Input
+                                    placeholder="Search users..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-[300px]"
+                                />
+                                {searchTerm && (
+                                    <Button variant="ghost" onClick={handleClearSearch}>
+                                        Clear
+                                    </Button>
                                 )}
                             </div>
-                            <Users className="h-8 w-8 text-muted-foreground" />
                         </div>
-                    </CardContent>
-                </Card>
 
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-muted-foreground">
-                            Admin Users
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex items-center justify-between">
-                            <div className="text-2xl font-bold">
-                                {isUsersLoading ? (
-                                    <Skeleton className="h-8 w-16" />
-                                ) : (
-                                    adminCount
-                                )}
+                        {isUsersLoading || isSearching ? (
+                            <div className="flex justify-center items-center h-[300px]">
+                                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                             </div>
-                            <Shield className="h-8 w-8 text-primary" />
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium text-muted-foreground">
-                            Banned Users
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex items-center justify-between">
-                            <div className="text-2xl font-bold">
-                                {isUsersLoading ? (
-                                    <Skeleton className="h-8 w-16" />
-                                ) : (
-                                    bannedCount
-                                )}
-                            </div>
-                            <Shield className="h-8 w-8 text-destructive" />
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-                <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-flex">
-                    <TabsTrigger value="users" className="flex items-center gap-2">
-                        <Users className="h-4 w-4" />
-                        <span className="hidden md:inline">User Management</span>
-                        <span className="md:hidden">Users</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="settings" className="flex items-center gap-2">
-                        <Shield className="h-4 w-4" />
-                        <span className="hidden md:inline">System Settings</span>
-                        <span className="md:hidden">Settings</span>
-                    </TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="users" className="space-y-4">
-                    <Card>
-                        <CardHeader className="pb-0">
-                            <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-                                <CardTitle>User Management</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="pt-6 space-y-6">
-                            {/* Search bar */}
-                            <div className="flex flex-col gap-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <Input
-                                            placeholder="Search users..."
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="w-[300px]"
-                                        />
-                                        {searchTerm && (
-                                            <Button variant="ghost" onClick={handleClearSearch}>
-                                                Clear
-                                            </Button>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {isUsersLoading || isSearching ? (
-                                    <div className="flex justify-center items-center h-[300px]">
-                                        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                                    </div>
-                                ) : (
-                                    <TableCard
-                                        data={usersData?.users || []}
-                                        totalRows={totalUsers}
-                                        pagination={pagination}
-                                        onPaginationChange={setPagination}
-                                    />
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-
-                <TabsContent value="settings" className="space-y-4">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>System Settings</CardTitle>
-                            <CardDescription>
-                                Configure system-wide settings and permissions
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <Alert>
-                                <AlertCircle className="h-4 w-4" />
-                                <AlertDescription>
-                                    System settings will be implemented in a future update.
-                                </AlertDescription>
-                            </Alert>
-                            {/* Placeholder for future settings */}
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-            </Tabs>
+                        ) : (
+                            <TableCard
+                                data={usersData?.users || []}
+                                totalRows={totalUsers}
+                                pagination={pagination}
+                                onPaginationChange={setPagination}
+                            />
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     )
 } 

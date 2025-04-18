@@ -1,7 +1,8 @@
-import type { auth } from "@/lib/auth"; // Re-add auth for Session type
-import { protectedRoutes } from "@/lib/protected-routes"; // Import static routes
 import { betterFetch } from "@better-fetch/fetch"; // Re-add betterFetch
 import { NextRequest, NextResponse } from "next/server";
+
+import type { auth } from "@/lib/auth"; // Re-add auth for Session type
+import { protectedRoutes } from "@/lib/protected-routes"; // Import static routes
 
 // Define Session type locally
 type Session = typeof auth.$Infer.Session & { user?: { role?: string } };

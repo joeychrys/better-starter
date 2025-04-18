@@ -1,11 +1,10 @@
 "use client"
 
-import { Session } from "@/lib/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { Laptop, Smartphone } from "lucide-react"
 import { UAParser } from "ua-parser-js"
 
-
+import { Session } from "@/lib/types"
 
 
 export const columns: ColumnDef<Session["session"]>[] = [

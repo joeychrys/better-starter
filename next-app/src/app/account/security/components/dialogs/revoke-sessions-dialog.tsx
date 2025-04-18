@@ -1,12 +1,13 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { authClient } from "@/lib/auth-client"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { authClient } from "@/lib/auth-client"
 
 export default function RevokeSessionsDialog() {
     const router = useRouter()
@@ -19,8 +20,12 @@ export default function RevokeSessionsDialog() {
             toast.success("Sessions revoked successfully")
             router.refresh()
             setDialogOpen(false)
-        } catch (error: any) {
-            toast.error(`Error: ${error.message || "Failed to revoke sessions"}`)
+        } catch (error: unknown) {
+            let errorMessage = "Failed to revoke sessions"
+            if (error instanceof Error) {
+                errorMessage = error.message
+            }
+            toast.error(`Error: ${errorMessage}`)
         }
     }
 

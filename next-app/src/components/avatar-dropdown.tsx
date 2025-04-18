@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from 'next/navigation';
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
     DropdownMenu,
@@ -11,15 +14,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient as client } from "@/lib/auth-client";
 import { Session } from "@/lib/types";
-import Link from "next/link";
-import { useRouter } from 'next/navigation';
 
 
 export default function AvatarDropdown(props: {
     session: Session | null
 }) {
     const router = useRouter();
-    const { data, isPending } = client.useSession();
+    const { data } = client.useSession();
     const session = data || props.session
 
     // If no user is found, don't render the dropdown
