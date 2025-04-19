@@ -16,7 +16,7 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY ./next-app ./
-COPY ./.envs/.local/.next ./.env.production
+COPY ./.envs/.staging/.next ./.env.production
 
 # Install dependencies necessary for build
 COPY ./next-app/package.json ./next-app/package-lock.json* ./
