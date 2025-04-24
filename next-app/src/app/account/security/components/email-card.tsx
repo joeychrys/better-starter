@@ -2,14 +2,18 @@
 
 import { Mail } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import { authClient } from "@/lib/auth-client"
-
+import { useState } from "react"
+import { toast } from "sonner"
 
 export default function EmailCard() {
     const { data: session } = authClient.useSession()
+    const [isVerifying, setIsVerifying] = useState<boolean>(false)
+
+
 
     if (!session) {
         return (
@@ -37,19 +41,30 @@ export default function EmailCard() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="border rounded-md p-4">
+                <div className="">
+                    <Separator className="my-4" />
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:justify-between">
-                        <div className="flex items-center gap-2">
-                            {session.user.emailVerified ? (
-                                <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Verified</Badge>
-                            ) : (
-                                <Badge variant="destructive" >Not verified</Badge>
-                            )}
+                        <div className="flex items-center">
                             <span>{session.user.email}</span>
                         </div>
-                        {!session.user.emailVerified && (
-                            <Button variant="outline" size="sm" className="mt-2 sm:mt-0 sm:flex-shrink-0">
-                                Verify email
+                        {session.user.emailVerified ? (
+                            <Button variant="default" size="sm" className="bg-green-100 text-green-800 mt-2 sm:mt-0 sm:flex-shrink-0 hover:bg-green-100 hover:cursor-default">
+                                Verified
+                            </Button>
+                        ) : (
+                            <Button variant="destructive" disabled={isVerifying} size="sm" className="mt-2 sm:mt-0 sm:flex-shrink-0" onClick={async () => {
+                                await authClient.sendVerificationEmail({
+                                    email: session.user.email,
+                                    callbackURL: "/account/security"
+                                }).then(() => {
+                                    toast.success("Verification email sent")
+                                    setIsVerifying(true)
+                                }).catch((_error) => {
+                                    toast.error("Failed to send verification email")
+                                    setIsVerifying(false)
+                                })
+                            }}>
+                                Verify Email
                             </Button>
                         )}
                     </div>

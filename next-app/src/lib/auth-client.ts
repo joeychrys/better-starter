@@ -7,7 +7,10 @@ const baseURL = process.env.NEXT_PUBLIC_BASE_URL || ""
 
 export const authClient = createAuthClient({
     baseURL, // will use current origin if empty
-    plugins: [adminClient(), stripeClient({
-        subscription: true,
-    })]
+    plugins: [
+        adminClient(), 
+        stripeClient({
+            subscription: true,
+        })
+    ]
 })

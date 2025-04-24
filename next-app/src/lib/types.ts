@@ -16,3 +16,16 @@ export interface ProtectedRoute {
     path?: string;
     roles?: string[];
 }
+
+export interface EmailTemplateProps {
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        emailVerified: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        image?: string | null | undefined;
+    };
+    url: string;
+}
