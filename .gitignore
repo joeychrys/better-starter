@@ -55,7 +55,6 @@ shell.nix
 
 # .envs
 .envs/.local/.next
-.envs/.staging/.next
 .envs/.production/.next
 
 # stripe plans
