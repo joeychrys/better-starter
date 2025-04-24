@@ -8,12 +8,15 @@ import PasswordCard from "./components/password-card";
 import SessionsCard from "./components/sessions-card";
 
 export default async function SecurityPage() {
-    const [activeSessions, userAccounts]=
+    const [activeSessions, userAccounts, user]=
         await Promise.all([
             auth.api.listSessions({
                 headers: await headers(),
             }),
             auth.api.listUserAccounts({
+                headers: await headers(),
+            }),
+            auth.api.getSession({
                 headers: await headers(),
             })
         ]).catch((e) => {
@@ -21,6 +24,7 @@ export default async function SecurityPage() {
             throw redirect("/sign-in");
         });
 
+    const isCredentialAccount = userAccounts.some(account => account.provider === "credential");
 
     return (
         <div className="space-y-8">
@@ -34,8 +38,8 @@ export default async function SecurityPage() {
             <div className="bg-card rounded-lg p-4 sm:p-6 space-y-6">
                 <EmailCard />
                 {
-                    userAccounts.length < 1 && (
-                        <PasswordCard />
+                    user?.user.emailVerified && isCredentialAccount && (
+                        <PasswordCard user={user.user} />
                     )
                 }
                 <SessionsCard

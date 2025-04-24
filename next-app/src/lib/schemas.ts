@@ -2,7 +2,8 @@ import { z } from "zod";
 
 export const emailSchema = z
     .string({
-        required_error: "Email can not be empty." })
+        required_error: "Email can not be empty."
+    })
     .email({
         message: "Invalid email address.",
     })
@@ -64,3 +65,11 @@ export const UsernameFormSchema = z
         name: nameSchema,
     })
 
+export const ResetPasswordFormSchema = z
+    .object({
+        password: passwordSchema,
+        password2: passwordSchema,
+    }).refine(({ password, password2 }) => password === password2, {
+        path: ["password2"],
+        message: "Password didn't match.",
+    }); 

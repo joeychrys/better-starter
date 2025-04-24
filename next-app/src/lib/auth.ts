@@ -8,6 +8,7 @@ import { admin, openAPI } from "better-auth/plugins";
 import { Resend } from "resend";
 import Stripe from "stripe";
 import { stripePlans } from "./stripe-plans";
+import { ResetPasswordEmail } from "@/components/email-templates/reset-password";
 
 
 const resend = new Resend(process.env.RESEND_API_KEY!)
@@ -19,7 +20,15 @@ export const auth = betterAuth({
         provider: "pg",
     }),
     emailAndPassword: {
-        enabled: true
+        enabled: true,
+        sendResetPassword: async ({ user, url, token }, request) => {
+            await resend.emails.send({
+                from: "Next Starter <reset@joeychrys.com>",
+                to: user.email,
+                subject: "Reset your password",
+                react: ResetPasswordEmail({ user, url }),
+            });
+        }
     },
     socialProviders: {
         google: {
