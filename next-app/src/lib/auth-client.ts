@@ -1,16 +1,16 @@
-import { stripeClient } from "@better-auth/stripe/client"
-import { adminClient } from "better-auth/client/plugins"
-import { createAuthClient } from "better-auth/react"
+import { stripeClient } from '@better-auth/stripe/client';
+import { adminClient } from 'better-auth/client/plugins';
+import { createAuthClient } from 'better-auth/react';
 
 // Use environment variable or default to relative URL which will use current origin
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL || ""
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 export const authClient = createAuthClient({
-    baseURL, // will use current origin if empty
-    plugins: [
-        adminClient(),
-        stripeClient({
-            subscription: true,
-        })
-    ]
-})
+  baseURL, // will use current origin if empty
+  plugins: [
+    adminClient(),
+    stripeClient({
+      subscription: true,
+    }),
+  ],
+});
