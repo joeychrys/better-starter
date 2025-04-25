@@ -2,14 +2,12 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { GoogleIcon } from '@/components/icons/google-icon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -20,28 +18,33 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { authClient } from '@/lib/auth-client';
-import { SignInFormSchema } from '@/lib/schemas';
+import { ResetPasswordFormSchema } from '@/lib/schemas';
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof SignInFormSchema>>({
-    resolver: zodResolver(SignInFormSchema),
+  const form = useForm<z.infer<typeof ResetPasswordFormSchema>>({
+    resolver: zodResolver(ResetPasswordFormSchema),
     defaultValues: {
-      email: '',
       password: '',
+      password2: '',
     },
   });
 
-  async function onSubmit(data: z.infer<typeof SignInFormSchema>) {
-    await authClient.signIn.email({
-      email: data.email,
-      password: data.password,
-      callbackURL: '/',
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+
+  if (!token) {
+    return router.push('/');
+  }
+
+  async function onSubmit(data: z.infer<typeof ResetPasswordFormSchema>) {
+    await authClient.resetPassword({
+      newPassword: data.password,
+      token: token || '123',
       fetchOptions: {
         onResponse: () => {
           setLoading(false);
@@ -53,7 +56,8 @@ export default function SignInPage() {
           toast.error(`Uh Oh! ${ctx.error.message}`);
         },
         onSuccess: async () => {
-          router.push('/');
+          toast.success('Password reset successfully');
+          router.push('/account/security');
         },
       },
     });
@@ -64,22 +68,24 @@ export default function SignInPage() {
       <section className="mx-auto max-w-md p-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Sign In</CardTitle>
-            <CardDescription>Enter the following information to sign in.</CardDescription>
+            <CardTitle className="text-2xl">Reset Password</CardTitle>
+            <CardDescription>
+              Enter the following information to update your password.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-6">
-              {/* Sign In Form */}
+              {/* Sign Up Form */}
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
                   <FormField
                     control={form.control}
-                    name="email"
+                    name="password"
                     render={({ field }) => (
                       <FormItem className="grid gap-2">
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>New Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="better@auth.com" {...field} />
+                          <PasswordInput placeholder="" autoComplete="new-password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -88,10 +94,10 @@ export default function SignInPage() {
 
                   <FormField
                     control={form.control}
-                    name="password"
+                    name="password2"
                     render={({ field }) => (
                       <FormItem className="grid gap-2">
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
                           <PasswordInput placeholder="" autoComplete="new-password" {...field} />
                         </FormControl>
@@ -100,32 +106,10 @@ export default function SignInPage() {
                     )}
                   />
                   <Button type="submit" disabled={loading}>
-                    {loading ? <Loader2 size={16} className="animate-spin" /> : 'Sign In'}
+                    {loading ? <Loader2 size={16} className="animate-spin" /> : 'Update Password'}
                   </Button>
                 </form>
               </Form>
-
-              {/* Social Sign In */}
-              <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-              <Button
-                onClick={() => authClient.signIn.social({ provider: 'google' })}
-                variant={'outline'}
-              >
-                <GoogleIcon />
-                Sign in with Google
-              </Button>
-
-              {/* Sign Up Link */}
-              <div className="flex w-full justify-center space-x-2">
-                <span>Don&apos;t have an account?</span>
-                <Link className="underline" href={'sign-up'}>
-                  Sign up
-                </Link>
-              </div>
             </div>
           </CardContent>
         </Card>
