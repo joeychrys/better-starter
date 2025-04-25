@@ -62,6 +62,7 @@ export default function SignUpPage() {
                 },
                 onSuccess: async () => {
                     router.push("/")
+                    router.refresh()
                 }
             }
         })
