@@ -12,7 +12,7 @@
     "lint:fix": "eslint --fix \"**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
-    "@better-auth/stripe": "^1.2.4",
+    "@better-auth/stripe": "^1.2.12",
     "@hookform/resolvers": "^4.1.2",
     "@libsql/client": "^0.14.0",
     "@neondatabase/serverless": "^1.0.0",
