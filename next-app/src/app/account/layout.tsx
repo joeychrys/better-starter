@@ -68,7 +68,7 @@ function NavItem({ href, active, children, icon }: NavItemProps) {
     <Link
       href={href}
       className={`flex items-center rounded-md px-3 py-2 text-sm ${
-        active ? 'bg-primary/10 font-medium text-primary' : 'text-muted-foreground hover:bg-muted'
+        active ? 'bg-muted font-medium' : 'text-muted-foreground hover:text-black dark:hover:text-white'
       }`}
     >
       {icon}

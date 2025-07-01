@@ -1,6 +1,7 @@
 import { stripeClient } from '@better-auth/stripe/client';
 import { adminClient } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
+import { polarClient } from "@polar-sh/better-auth"
 
 // Use environment variable or default to relative URL which will use current origin
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL || '';
@@ -12,5 +13,6 @@ export const authClient = createAuthClient({
     stripeClient({
       subscription: true,
     }),
+    polarClient()
   ],
 });

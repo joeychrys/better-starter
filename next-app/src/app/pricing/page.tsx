@@ -32,6 +32,13 @@ export default function Pricing() {
     });
   };
 
+  const handlePolarProPlan = async () => {
+    await authClient.checkout({
+      slug: "pro",
+    })
+  }
+
+
   return (
     <div className="container mx-auto px-5 py-20">
       <div className="mb-16 text-center">
@@ -100,7 +107,7 @@ export default function Pricing() {
           </CardContent>
 
           <CardFooter className="pt-6">
-            <Button className="w-full bg-primary" onClick={handleProPlan}>
+            <Button className="w-full bg-primary" onClick={handlePolarProPlan}>
               Get Started
             </Button>
           </CardFooter>
