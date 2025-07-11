@@ -26,7 +26,7 @@ export default async function ProfilePage() {
         <p className="text-sm text-muted-foreground">Manage your profile information.</p>
       </div>
 
-      <div className="space-y-6 rounded-lg bg-card p-4 sm:p-6">
+      <div className="space-y-6 rounded-lg p-4 sm:p-6">
         <ProfileCard session={JSON.parse(JSON.stringify(session))} />
         <LinkedAccountsCard userAccounts={JSON.parse(JSON.stringify(userAccounts))} />
       </div>
