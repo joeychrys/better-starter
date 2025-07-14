@@ -32,7 +32,7 @@ export default async function SecurityPage() {
         <p className="text-sm text-muted-foreground">Manage your account security settings.</p>
       </div>
 
-      <div className="space-y-6 rounded-lg bg-card p-4 sm:p-6">
+      <div className="space-y-6 rounded-lg p-4 sm:p-6">
         <EmailCard />
         {user?.user.emailVerified && isCredentialAccount && <PasswordCard user={user.user} />}
         <SessionsCard activeSessions={JSON.parse(JSON.stringify(activeSessions))} />

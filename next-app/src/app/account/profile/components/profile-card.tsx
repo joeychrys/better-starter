@@ -38,7 +38,7 @@ export default function ProfileCard(props: { session: Session }) {
             {props.session.user.role && (
               <Badge
                 variant={props.session.user.role === 'admin' ? 'destructive' : 'secondary'}
-                className="mt-1"
+                className="mt-1 text-white dark:text-destructive-foreground"
               >
                 {props.session.user.role}
               </Badge>
