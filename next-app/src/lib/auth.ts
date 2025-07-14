@@ -80,6 +80,10 @@ export const auth = betterAuth({
             {
               productId: "9813452d-8812-4f49-9d33-a34be797b46b",
               slug: "pro"
+            },
+            {
+              productId: "b85cdce5-fabd-4fb4-b3ff-620893bd795c",
+              slug: "tokens"
             }
           ],
           successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?checkout_id={CHECKOUT_ID}`,

@@ -38,6 +38,12 @@ export default function Pricing() {
     })
   }
 
+  const handlePolarTokenPurchase = async () => {
+    await authClient.checkout({
+      slug: "tokens",
+    })
+  }
+
 
   return (
     <div className="container mx-auto px-5 py-20">
@@ -149,6 +155,38 @@ export default function Pricing() {
               Contact Sales
             </Button>
           </CardFooter>
+        </Card>
+      </div>
+
+      {/* Token Purchase Card */}
+      <div className="mx-auto mt-20 max-w-6xl">
+        <Card className="border-primary/20">
+          <div className="grid gap-6 p-8 md:grid-cols-3 md:items-center">
+            {/* Left Section - Header */}
+            <div className="text-center md:text-left">
+              <CardTitle className="mb-2 text-2xl font-bold">Need More Tokens?</CardTitle>
+              <CardDescription>
+                Purchase additional tokens for your AI agents
+              </CardDescription>
+            </div>
+
+            {/* Middle Section - Pricing */}
+            <div className="text-center">
+              <div className="text-4xl font-bold">$5</div>
+              <div className="text-muted-foreground">for 10 tokens</div>
+            </div>
+
+            {/* Right Section - CTA */}
+            <div className="text-center">
+              <Button
+                size="lg"
+                className="w-full md:w-auto md:px-8"
+                onClick={handlePolarTokenPurchase}
+              >
+                Purchase Tokens
+              </Button>
+            </div>
+          </div>
         </Card>
       </div>
 

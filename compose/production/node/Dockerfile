@@ -1,6 +1,9 @@
 # Base image
 FROM docker.io/node:22.14-bookworm-slim AS base
 
+# Install pnpm
+RUN corepack enable pnpm
+
 # 1. Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -8,8 +11,8 @@ FROM base AS deps
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY ./next-app/package.json ./next-app/package-lock.json* ./
-RUN npm ci --omit=dev
+COPY ./next-app/package.json ./next-app/pnpm-lock.yaml* ./
+RUN pnpm install --prod --frozen-lockfile
 
 # 2. Rebuild the source code only when needed
 FROM base AS builder
@@ -19,15 +22,15 @@ COPY ./next-app ./
 COPY ./.envs/.production/.next ./.env.production
 
 # Install dependencies necessary for build
-COPY ./next-app/package.json ./next-app/package-lock.json* ./
-RUN npm ci
+COPY ./next-app/package.json ./next-app/pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN npm run build
+RUN pnpm run build
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner
