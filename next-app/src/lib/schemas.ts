@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const emailSchema = z
   .string({
-    required_error: 'Email can not be empty.',
+    message: 'Email can not be empty.',
   })
   .email({
     message: 'Invalid email address.',
@@ -10,7 +10,7 @@ export const emailSchema = z
 
 export const nameSchema = z
   .string({
-    required_error: 'Name can not be empty.',
+    message: 'Name can not be empty.',
   })
   .min(4, {
     message: 'Minimum 4 characters.',
@@ -24,7 +24,7 @@ export const nameSchema = z
 
 export const passwordSchema = z
   .string({
-    required_error: 'Password can not be empty.',
+    message: 'Password can not be empty.',
   })
   .regex(/^.{8,20}$/, {
     message: 'Minimum 8 and maximum 20 characters.',

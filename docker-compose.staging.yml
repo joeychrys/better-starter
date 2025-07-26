@@ -1,0 +1,49 @@
+volumes:
+  staging_postgres_data:
+
+services:
+  next-app:
+    build:
+      context: .
+      dockerfile: ./compose/staging/node/Dockerfile
+      target: staging
+    image: staging_next_app
+    container_name: staging_next_app
+    command: node server.js
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    env_file:
+      - ./.envs/.staging/.next
+    ports:
+      - '3001:3000'  # Use port 3001 to avoid conflicts with local dev
+    depends_on:
+      - postgres
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/local/postgres/Dockerfile
+    image: staging_postgres
+    container_name: staging_postgres
+    volumes:
+      - staging_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.staging/.postgres
+    ports:
+      - '5433:5432'  # Use port 5433 to avoid conflicts with local dev
+
+  # Development tools service - use with --rm for manual commands
+  dev-tools:
+    build:
+      context: .
+      dockerfile: ./compose/staging/node/Dockerfile
+      target: deps-dev
+    image: staging_dev_tools
+    volumes:
+      - ./next-app:/app
+      - /app/node_modules
+    working_dir: /app
+    profiles:
+      - tools 

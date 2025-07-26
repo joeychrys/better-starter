@@ -26,7 +26,7 @@ export const auth = betterAuth({
         from: 'Next Starter <reset@joeychrys.com>',
         to: user.email,
         subject: 'Reset your password',
-        react: ResetPasswordEmail({ user, url }),
+        react: ResetPasswordEmail({ user, url }) as React.ReactElement,
       });
     },
   },
@@ -44,7 +44,7 @@ export const auth = betterAuth({
         from: 'Next Starter <verify@joeychrys.com>',
         to: user.email,
         subject: 'Verify your email address',
-        react: VerificationEmail({ user, url }),
+        react: VerificationEmail({ user, url }) as React.ReactElement,
       });
     },
   },

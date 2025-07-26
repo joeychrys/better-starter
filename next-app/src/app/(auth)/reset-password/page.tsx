@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -22,7 +22,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { authClient } from '@/lib/auth-client';
 import { ResetPasswordFormSchema } from '@/lib/schemas';
 
-export default function SignUpPage() {
+function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -38,7 +38,8 @@ export default function SignUpPage() {
   const token = searchParams.get('token');
 
   if (!token) {
-    return router.push('/');
+    router.push('/');
+    return null;
   }
 
   async function onSubmit(data: z.infer<typeof ResetPasswordFormSchema>) {
@@ -64,56 +65,62 @@ export default function SignUpPage() {
   }
 
   return (
-    <>
-      <section className="mx-auto max-w-md p-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Reset Password</CardTitle>
-            <CardDescription>
-              Enter the following information to update your password.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-6">
-              {/* Sign Up Form */}
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-2">
-                        <FormLabel>New Password</FormLabel>
-                        <FormControl>
-                          <PasswordInput placeholder="" autoComplete="new-password" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+    <section className="mx-auto max-w-md p-4">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">Reset Password</CardTitle>
+          <CardDescription>
+            Enter the following information to update your password.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-6">
+            {/* Sign Up Form */}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel>New Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput placeholder="" autoComplete="new-password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  <FormField
-                    control={form.control}
-                    name="password2"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-2">
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <PasswordInput placeholder="" autoComplete="new-password" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" disabled={loading}>
-                    {loading ? <Loader2 size={16} className="animate-spin" /> : 'Update Password'}
-                  </Button>
-                </form>
-              </Form>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-    </>
+                <FormField
+                  control={form.control}
+                  name="password2"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-2">
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput placeholder="" autoComplete="new-password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" disabled={loading}>
+                  {loading ? <Loader2 size={16} className="animate-spin" /> : 'Update Password'}
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

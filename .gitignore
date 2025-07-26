@@ -56,6 +56,7 @@ shell.nix
 # .envs
 .envs/.local/.next
 .envs/.production/.next
+.envs/.staging/.next
 
 # stripe plans
 next-app/src/lib/stripe-plans.ts
