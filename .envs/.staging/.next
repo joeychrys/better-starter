@@ -1,0 +1,20 @@
+# Database
+DATABASE_URL=postgresql://postgres:password@postgres:5432/staging_db
+
+# Better Auth
+BETTER_AUTH_SECRET=your-staging-auth-secret-key-here
+BETTER_AUTH_URL=http://localhost:3001
+
+# Email (for testing)
+RESEND_API_KEY=your-resend-api-key
+
+# Google OAuth (optional for staging)
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# Stripe (use test keys for staging)
+STRIPE_PUBLISHABLE_KEY=pk_test_your-stripe-publishable-key
+STRIPE_SECRET_KEY=sk_test_your-stripe-secret-key
+
+# Other staging-specific variables
+NEXT_PUBLIC_APP_URL=http://localhost:3001 

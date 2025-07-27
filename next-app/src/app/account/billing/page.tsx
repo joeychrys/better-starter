@@ -1,8 +1,7 @@
 'use client';
 
-import { Subscription } from '@better-auth/stripe';
-import { BarChart3, CalendarDays, Check, Package } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { BarChart3, CalendarDays, Package, User } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,90 +14,41 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { authClient } from '@/lib/auth-client';
-import { cn } from '@/lib/utils';
+
+const fetchCustomerState = async () => {
+  const { data: customerState } = await authClient.customer.state();
+  return customerState;
+};
 
 export default function BillingPage() {
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: customerState, isLoading, error } = useQuery({
+    queryKey: ['customer-state'],
+    queryFn: fetchCustomerState,
+  });
 
-  useEffect(() => {
-    async function fetchSubscription() {
-      try {
-        const { data: subscriptions } = await authClient.subscription.list();
-
-        // Get the active subscription
-        const activeSubscription = subscriptions?.find(
-          (sub) => sub.status === 'active' || sub.status === 'trialing'
-        );
-
-        setSubscription(activeSubscription || null);
-      } catch (error) {
-        console.error('Failed to fetch subscription:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchSubscription();
-  }, []);
-
-  const handleCancelSubscription = async () => {
+  const handleManageSubscription = async () => {
     try {
-      await authClient.subscription.cancel({
-        returnUrl: '/account/billing',
-      });
-
-      // Redirect to Stripe portal will happen automatically
+      // Redirect to Polar customer portal or subscription management
+      // This would need to be implemented based on Polar's customer portal
+      console.log('Manage subscription clicked');
     } catch (error) {
-      console.error('Failed to initiate cancellation:', error);
+      console.error('Failed to manage subscription:', error);
     }
   };
 
-  const handleChangePlan = async () => {
+  const handleUpgradePlan = async () => {
     // Redirect to pricing page
     window.location.href = '/pricing';
   };
 
-  // Default usage values if no active subscription
-  const usageData = {
-    storage: {
-      used: 0,
-      total: 0,
-      unit: 'GB',
-    },
-    features: [
-      'Access to 3 AI agents',
-      '1,000 queries per month',
-      'Standard response times',
-      'Basic analytics',
-      'Email support',
-    ],
-    apiCalls: { used: 0, total: 0 },
-    bandwidth: { used: 0, total: 0 },
-    projects: { used: 0, total: 0 },
+  const formatCurrency = (amount: number, currency: string) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency.toUpperCase(),
+    }).format(amount / 100); // Assuming amount is in cents
   };
 
-  function Feature({
-    children,
-    highlighted = false,
-  }: {
-    children: React.ReactNode;
-    highlighted?: boolean;
-  }) {
-    return (
-      <li className="flex items-start">
-        <Check
-          className={cn(
-            'mr-2.5 h-5 w-5 shrink-0',
-            highlighted ? 'text-primary' : 'text-primary/70'
-          )}
-        />
-        <span className={highlighted ? 'font-medium' : ''}>{children}</span>
-      </li>
-    );
-  }
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="space-y-8">
         <div>
@@ -109,7 +59,20 @@ export default function BillingPage() {
     );
   }
 
-  if (!subscription) {
+  if (error) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
+          <p className="text-sm text-destructive">
+            Failed to load billing information. Please try again.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!customerState || customerState.activeSubscriptions.length === 0) {
     return (
       <div className="space-y-8">
         <div>
@@ -131,146 +94,173 @@ export default function BillingPage() {
             </p>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleChangePlan}>View Plans</Button>
+            <Button onClick={handleUpgradePlan}>View Plans</Button>
           </CardFooter>
         </Card>
       </div>
     );
   }
 
+  const activeSubscription = customerState.activeSubscriptions[0]; // Get the first active subscription
+
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
         <p className="text-sm text-muted-foreground">
-          Manage your subscription and payment methods.
+          Manage your subscription and view usage information.
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Current Plan */}
-        <Card>
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
+      <div className="grid gap-6">
+        {/* Top Row: Account Details and Current Plan */}
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Account Details */}
+          <Card>
+            <CardHeader className="pb-4">
               <div className="flex items-center gap-2">
-                <Package className="h-5 w-5" />
-                <CardTitle className="text-lg font-medium capitalize">
-                  {subscription.plan} Plan
-                </CardTitle>
+                <User className="h-5 w-5" />
+                <CardTitle className="text-lg font-medium">Account Details</CardTitle>
               </div>
-              <Badge
-                variant="outline"
-                className={
-                  subscription.status === 'active'
-                    ? 'border-green-200 bg-green-50 text-green-700'
-                    : subscription.status === 'trialing'
-                      ? 'border-blue-200 bg-blue-50 text-blue-700'
-                      : 'border-amber-200 bg-amber-50 text-amber-700'
-                }
-              >
-                {subscription.status}
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div>
-              <h4 className="mb-2 font-medium">Features included:</h4>
-              <ul className="space-y-1">
-                {usageData.features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-2 text-sm">
-                    <Feature highlighted={index === 0}>{feature}</Feature>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Name</p>
+                  <p className="text-sm font-semibold">{customerState.name}</p>
+                </div>
+              </div>
 
-            <div className="mt-4 flex items-center gap-2 text-sm">
-              <CalendarDays className="h-4 w-4 text-muted-foreground" />
-              <span className="text-muted-foreground">
-                {subscription.periodEnd
-                  ? `Current period ends on ${new Date(subscription.periodEnd).toLocaleDateString()}`
-                  : 'Subscription active'}
-              </span>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <div className="xs:flex-row flex w-full flex-col gap-2">
-              <Button variant="outline" size="sm" className="w-full" onClick={handleChangePlan}>
+              {customerState.billingAddress && (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Billing Address</p>
+                  <div className="rounded-md bg-muted/50 p-3 text-sm">
+                    <p className="font-medium">{customerState.billingAddress.line1}</p>
+                    {customerState.billingAddress.line2 && (
+                      <p>{customerState.billingAddress.line2}</p>
+                    )}
+                    <p>
+                      {customerState.billingAddress.city}, {customerState.billingAddress.state}{' '}
+                      {customerState.billingAddress.postalCode}
+                    </p>
+                    <p className="text-muted-foreground">{customerState.billingAddress.country}</p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Current Plan */}
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Package className="h-5 w-5" />
+                  <CardTitle className="text-lg font-medium">Current Plan</CardTitle>
+                </div>
+                <Badge
+                  variant="outline"
+                  className={
+                    activeSubscription.status === 'active'
+                      ? 'border-green-200 bg-green-50 text-green-700'
+                      : 'border-amber-200 bg-amber-50 text-amber-700'
+                  }
+                >
+                  {activeSubscription.status}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="text-center">
+                  <p className="text-3xl font-bold">
+                    {formatCurrency(activeSubscription.amount, activeSubscription.currency)}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    per {activeSubscription.recurringInterval}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center gap-2 text-sm">
+                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">
+                    Current period ends{' '}
+                    {activeSubscription.currentPeriodEnd
+                      ? new Date(activeSubscription.currentPeriodEnd).toLocaleDateString()
+                      : 'N/A'}
+                  </span>
+                </div>
+
+                {activeSubscription.cancelAtPeriodEnd && (
+                  <div className="rounded-md bg-amber-50 p-3 text-center">
+                    <p className="text-sm text-amber-800">
+                      Subscription will be canceled at period end
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+            <div className="flex justify-between gap-2 p-4">
+              <Button variant="outline" size="sm" className="w-full" onClick={handleUpgradePlan}>
                 Change Plan
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-destructive hover:text-destructive"
-                onClick={handleCancelSubscription}
-                disabled={subscription.cancelAtPeriodEnd}
-              >
-                {subscription.cancelAtPeriodEnd ? 'Cancellation Scheduled' : 'Cancel Plan'}
-              </Button>
             </div>
-          </CardFooter>
-        </Card>
+          </Card>
+        </div>
 
-        {/* Usage & Analytics */}
+        {/* Bottom Row: Usage spanning full width */}
         <Card>
-          <CardHeader className="pb-2">
-            <div className="mb-2 flex items-center gap-2">
+          <CardHeader className="pb-4">
+            <div className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
-              <CardTitle className="text-lg font-medium">Usage & Analytics</CardTitle>
+              <CardTitle className="text-lg font-medium">Usage & Credits</CardTitle>
             </div>
-            <CardDescription>Monitor your account usage</CardDescription>
+            <CardDescription>
+              Monitor your current usage and available credits across all meters
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div>
-                <div className="mb-1 flex items-center justify-between">
-                  <span className="text-sm font-medium">API Calls</span>
-                  <span className="text-sm text-muted-foreground">
-                    {usageData.apiCalls.used.toLocaleString()} /{' '}
-                    {usageData.apiCalls.total === Infinity
-                      ? 'Unlimited'
-                      : usageData.apiCalls.total.toLocaleString()}
-                  </span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-                  <div className="h-full bg-primary transition-all" style={{ width: `${10}%` }} />
-                </div>
-              </div>
+            {customerState.activeMeters.length > 0 ? (
+              <div className="space-y-4">
+                {customerState.activeMeters.map((meter) => {
+                  const usagePercentage = meter.creditedUnits > 0
+                    ? (meter.consumedUnits / meter.creditedUnits) * 100
+                    : 0;
 
-              <div>
-                <div className="mb-1 flex items-center justify-between">
-                  <span className="text-sm font-medium">Bandwidth</span>
-                  <span className="text-sm text-muted-foreground">
-                    {usageData.bandwidth.used} MB /{' '}
-                    {usageData.bandwidth.total === Infinity
-                      ? 'Unlimited'
-                      : `${usageData.bandwidth.total} MB`}
-                  </span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-                  <div className="h-full bg-primary transition-all" style={{ width: `${20}%` }} />
-                </div>
-              </div>
+                  return (
+                    <div key={meter.id} className="rounded-lg border p-4 w-full">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Credits</span>
+                          <span className="text-xs text-muted-foreground">
+                            {meter.consumedUnits} / {meter.creditedUnits} used
+                          </span>
+                        </div>
 
-              <div>
-                <div className="mb-1 flex items-center justify-between">
-                  <span className="text-sm font-medium">Projects</span>
-                  <span className="text-sm text-muted-foreground">
-                    {usageData.projects.used} /{' '}
-                    {usageData.projects.total === Infinity ? 'Unlimited' : usageData.projects.total}
-                  </span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
-                  <div className="h-full bg-primary transition-all" style={{ width: `${5}%` }} />
-                </div>
+                        <div className="space-y-2">
+                          <div className="h-3 w-full overflow-hidden rounded-full bg-secondary">
+                            <div
+                              className="h-full bg-primary transition-all duration-300"
+                              style={{ width: `${Math.min(usagePercentage, 100)}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>{usagePercentage.toFixed(1)}% used</span>
+                            <span>{meter.balance} remaining</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
+            ) : (
+              <div className="text-center py-8">
+                <BarChart3 className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <p className="text-sm text-muted-foreground">No usage meters available</p>
+              </div>
+            )}
           </CardContent>
-          <CardFooter>
-            <Button variant="outline" size="sm" className="w-full">
-              View Detailed Analytics
-            </Button>
-          </CardFooter>
         </Card>
       </div>
     </div>
