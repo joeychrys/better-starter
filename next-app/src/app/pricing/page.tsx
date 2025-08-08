@@ -1,6 +1,7 @@
 'use client';
 
 import { Check } from 'lucide-react';
+import Link from 'next/link';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,28 +16,24 @@ import {
 import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
-import Link from 'next/link';
-
 export default function Pricing() {
-
   const handleBasicPlan = async () => {
     await authClient.checkout({
-      slug: "basic",
-    })
-  }
+      slug: 'basic',
+    });
+  };
 
   const handleProPlan = async () => {
     await authClient.checkout({
-      slug: "pro",
-    })
-  }
+      slug: 'pro',
+    });
+  };
 
   const handleTokenPurchase = async () => {
     await authClient.checkout({
-      slug: "tokens",
-    })
-  }
-
+      slug: 'tokens',
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 py-16 lg:py-24">
@@ -45,14 +42,15 @@ export default function Pricing() {
         <h1 className="mb-4 text-4xl font-bold tracking-tight lg:text-5xl">
           Simple, Transparent Pricing
         </h1>
-        <p className="mx-auto max-w-3xl text-lg text-muted-foreground lg:text-xl">
-          Choose the perfect plan for your AI agent needs. Scale as you grow with flexible pricing options.
+        <p className="text-muted-foreground mx-auto max-w-3xl text-lg lg:text-xl">
+          Choose the perfect plan for your AI agent needs. Scale as you grow with flexible pricing
+          options.
         </p>
       </div>
 
       {/* Token Purchase Section */}
       <div className="mx-auto mb-16 max-w-7xl">
-        <Card className="border-2 border-primary/20">
+        <Card className="border-primary/20 border-2">
           <CardContent className="p-8">
             <div className="grid gap-8 md:grid-cols-3 md:items-center">
               {/* Left Section - Header */}
@@ -67,9 +65,9 @@ export default function Pricing() {
               <div className="text-center">
                 <div className="flex items-baseline justify-center">
                   <span className="text-4xl font-bold">$5</span>
-                  <span className="ml-2 text-muted-foreground">/10 tokens</span>
+                  <span className="text-muted-foreground ml-2">/10 tokens</span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">One-time purchase</p>
+                <p className="text-muted-foreground mt-1 text-sm">One-time purchase</p>
               </div>
 
               {/* Right Section - CTA */}
@@ -88,18 +86,18 @@ export default function Pricing() {
       </div>
 
       {/* Pricing Cards */}
-      <div className="mx-auto grid max-w-7xl gap-6 lg:gap-8 md:grid-cols-3">
+      <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-3 lg:gap-8">
         {/* Basic Plan */}
         <Card className="relative flex h-full flex-col">
-          <CardHeader className="text-center pb-8">
+          <CardHeader className="pb-8 text-center">
             <CardTitle className="text-2xl font-semibold">Basic</CardTitle>
-            <CardDescription className="text-base mt-2">
+            <CardDescription className="mt-2 text-base">
               Perfect for individuals and small teams
             </CardDescription>
             <div className="mt-6">
               <div className="flex items-baseline justify-center">
                 <span className="text-5xl font-bold tracking-tight">$20</span>
-                <span className="ml-2 text-muted-foreground">/month</span>
+                <span className="text-muted-foreground ml-2">/month</span>
               </div>
             </div>
           </CardHeader>
@@ -122,20 +120,20 @@ export default function Pricing() {
         </Card>
 
         {/* Pro Plan */}
-        <Card className="relative flex h-full flex-col border-primary shadow-lg">
+        <Card className="border-primary relative flex h-full flex-col shadow-lg">
           <Badge variant="default" className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1">
             MOST POPULAR
           </Badge>
 
-          <CardHeader className="text-center pb-8">
+          <CardHeader className="pb-8 text-center">
             <CardTitle className="text-2xl font-semibold">Pro</CardTitle>
-            <CardDescription className="text-base mt-2">
+            <CardDescription className="mt-2 text-base">
               For growing businesses and productive teams
             </CardDescription>
             <div className="mt-6">
               <div className="flex items-baseline justify-center">
                 <span className="text-5xl font-bold tracking-tight">$80</span>
-                <span className="ml-2 text-muted-foreground">/month</span>
+                <span className="text-muted-foreground ml-2">/month</span>
               </div>
             </div>
           </CardHeader>
@@ -161,16 +159,16 @@ export default function Pricing() {
 
         {/* Enterprise Plan */}
         <Card className="relative flex h-full flex-col">
-          <CardHeader className="text-center pb-8">
+          <CardHeader className="pb-8 text-center">
             <CardTitle className="text-2xl font-semibold">Enterprise</CardTitle>
-            <CardDescription className="text-base mt-2">
+            <CardDescription className="mt-2 text-base">
               For large organizations with custom requirements
             </CardDescription>
             <div className="mt-6">
               <div className="flex items-baseline justify-center">
                 <span className="text-5xl font-bold tracking-tight">Custom</span>
               </div>
-              <p className="text-sm text-muted-foreground mt-1">Pricing tailored to your needs</p>
+              <p className="text-muted-foreground mt-1 text-sm">Pricing tailored to your needs</p>
             </div>
           </CardHeader>
 
@@ -190,11 +188,7 @@ export default function Pricing() {
 
           <CardFooter className="pt-8">
             <Link href="/contact" className="w-full">
-              <Button
-                className="w-full"
-                variant="outline"
-                size="lg"
-              >
+              <Button className="w-full" variant="outline" size="lg">
                 Contact Sales
               </Button>
             </Link>
@@ -206,8 +200,9 @@ export default function Pricing() {
       <div className="mt-24 text-center">
         <div className="mx-auto max-w-3xl">
           <h3 className="mb-4 text-2xl font-semibold">Need something more specific?</h3>
-          <p className="mx-auto mb-8 text-lg text-muted-foreground">
-            Contact our sales team to customize a plan that perfectly fits your organization's unique requirements and scale.
+          <p className="text-muted-foreground mx-auto mb-8 text-lg">
+            Contact our sales team to customize a plan that perfectly fits your organization&apos;s
+            unique requirements and scale.
           </p>
           <Button variant="outline" size="lg" className="px-8">
             Schedule a Demo
@@ -228,15 +223,14 @@ function Feature({
   return (
     <li className="flex items-start gap-3">
       <Check
-        className={cn(
-          'h-5 w-5 shrink-0 mt-0.5',
-          highlighted ? 'text-primary' : 'text-primary/70'
-        )}
+        className={cn('mt-0.5 h-5 w-5 shrink-0', highlighted ? 'text-primary' : 'text-primary/70')}
       />
-      <span className={cn(
-        'text-sm leading-relaxed',
-        highlighted ? 'font-medium text-foreground' : 'text-muted-foreground'
-      )}>
+      <span
+        className={cn(
+          'text-sm leading-relaxed',
+          highlighted ? 'text-foreground font-medium' : 'text-muted-foreground'
+        )}
+      >
         {children}
       </span>
     </li>

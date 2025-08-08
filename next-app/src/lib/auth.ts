@@ -1,10 +1,10 @@
+import { polar, checkout, portal, usage, webhooks } from '@polar-sh/better-auth';
+import { Polar } from '@polar-sh/sdk';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
 import { admin, openAPI } from 'better-auth/plugins';
 import { Resend } from 'resend';
-import { Polar } from "@polar-sh/sdk";
-import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth";
 
 import { ResetPasswordEmail } from '@/components/email-templates/reset-password';
 import { VerificationEmail } from '@/components/email-templates/verification-email';
@@ -13,9 +13,8 @@ import db from '@/db';
 const resend = new Resend(process.env.RESEND_API_KEY!);
 const polarClient = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
-  server: 'sandbox'
+  server: 'sandbox',
 });
-
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -61,17 +60,17 @@ export const auth = betterAuth({
         checkout({
           products: [
             {
-              productId: "f22fe868-afdb-4234-afe7-2766cb373ebd",
-              slug: "basic"
+              productId: 'f22fe868-afdb-4234-afe7-2766cb373ebd',
+              slug: 'basic',
             },
             {
-              productId: "9813452d-8812-4f49-9d33-a34be797b46b",
-              slug: "pro"
+              productId: '9813452d-8812-4f49-9d33-a34be797b46b',
+              slug: 'pro',
             },
             {
-              productId: "b85cdce5-fabd-4fb4-b3ff-620893bd795c",
-              slug: "tokens"
-            }
+              productId: 'b85cdce5-fabd-4fb4-b3ff-620893bd795c',
+              slug: 'tokens',
+            },
           ],
           successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?checkout_id={CHECKOUT_ID}`,
         }),
@@ -80,7 +79,7 @@ export const auth = betterAuth({
         webhooks({
           secret: process.env.POLAR_WEBHOOK_SECRET!,
         }),
-      ]
-    })
+      ],
+    }),
   ],
 });

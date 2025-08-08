@@ -2,7 +2,9 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { BarChart3, CalendarDays, Package, User } from 'lucide-react';
+import Link from 'next/link';
 
+import { PolarIcon } from '@/components/icons/polar-icon';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,9 +17,6 @@ import {
 } from '@/components/ui/card';
 import { authClient } from '@/lib/auth-client';
 
-import { PolarIcon } from '@/components/icons/polar-icon';
-import Link from 'next/link';
-
 const fetchCustomerState = async () => {
   const { data: customerState } = await authClient.customer.state();
   return customerState;
@@ -25,10 +24,14 @@ const fetchCustomerState = async () => {
 
 const PolarCustomerPortal = async () => {
   await authClient.customer.portal();
-}
+};
 
 export default function BillingPage() {
-  const { data: customerState, isLoading, error } = useQuery({
+  const {
+    data: customerState,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['customer-state'],
     queryFn: fetchCustomerState,
   });
@@ -45,7 +48,7 @@ export default function BillingPage() {
       <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-          <p className="text-sm text-muted-foreground">Loading subscription information...</p>
+          <p className="text-muted-foreground text-sm">Loading subscription information...</p>
         </div>
       </div>
     );
@@ -56,7 +59,7 @@ export default function BillingPage() {
       <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-          <p className="text-sm text-destructive">
+          <p className="text-destructive text-sm">
             Failed to load billing information. Please try again.
           </p>
         </div>
@@ -69,7 +72,7 @@ export default function BillingPage() {
       <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             You don&apos;t have an active subscription.
           </p>
         </div>
@@ -101,7 +104,7 @@ export default function BillingPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Manage your subscription and view usage information.
         </p>
       </div>
@@ -120,15 +123,15 @@ export default function BillingPage() {
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Name</p>
+                  <p className="text-muted-foreground text-sm font-medium">Name</p>
                   <p className="text-sm font-semibold">{customerState.name}</p>
                 </div>
               </div>
 
               {customerState.billingAddress && (
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-2">Billing Address</p>
-                  <div className="rounded-md bg-muted/50 p-3 text-sm">
+                  <p className="text-muted-foreground mb-2 text-sm font-medium">Billing Address</p>
+                  <div className="bg-muted/50 rounded-md p-3 text-sm">
                     <p className="font-medium">{customerState.billingAddress.line1}</p>
                     {customerState.billingAddress.line2 && (
                       <p>{customerState.billingAddress.line2}</p>
@@ -170,13 +173,13 @@ export default function BillingPage() {
                   <p className="text-3xl font-bold">
                     {formatCurrency(activeSubscription.amount, activeSubscription.currency)}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     per {activeSubscription.recurringInterval}
                   </p>
                 </div>
 
                 <div className="flex items-center justify-center gap-2 text-sm">
-                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                  <CalendarDays className="text-muted-foreground h-4 w-4" />
                   <span className="text-muted-foreground">
                     Current period ends{' '}
                     {activeSubscription.currentPeriodEnd
@@ -217,28 +220,27 @@ export default function BillingPage() {
             {customerState.activeMeters.length > 0 ? (
               <div className="space-y-4">
                 {customerState.activeMeters.map((meter) => {
-                  const usagePercentage = meter.creditedUnits > 0
-                    ? (meter.consumedUnits / meter.creditedUnits) * 100
-                    : 0;
+                  const usagePercentage =
+                    meter.creditedUnits > 0 ? (meter.consumedUnits / meter.creditedUnits) * 100 : 0;
 
                   return (
-                    <div key={meter.id} className="rounded-lg border p-4 w-full">
+                    <div key={meter.id} className="w-full rounded-lg border p-4">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium">Credits</span>
-                          <span className="text-xs text-muted-foreground">
+                          <span className="text-muted-foreground text-xs">
                             {meter.consumedUnits} / {meter.creditedUnits} used
                           </span>
                         </div>
 
                         <div className="space-y-2">
-                          <div className="h-3 w-full overflow-hidden rounded-full bg-secondary">
+                          <div className="bg-secondary h-3 w-full overflow-hidden rounded-full">
                             <div
-                              className="h-full bg-primary transition-all duration-300"
+                              className="bg-primary h-full transition-all duration-300"
                               style={{ width: `${Math.min(usagePercentage, 100)}%` }}
                             />
                           </div>
-                          <div className="flex justify-between text-xs text-muted-foreground">
+                          <div className="text-muted-foreground flex justify-between text-xs">
                             <span>{usagePercentage.toFixed(1)}% used</span>
                             <span>{meter.balance} remaining</span>
                           </div>
@@ -249,15 +251,23 @@ export default function BillingPage() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <BarChart3 className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-sm text-muted-foreground">No usage meters available</p>
+              <div className="py-8 text-center">
+                <BarChart3 className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+                <p className="text-muted-foreground text-sm">No usage meters available</p>
               </div>
             )}
           </CardContent>
         </Card>
-        <div className="flex justify-center items-center gap-1 mt-6 text-muted-foreground">
-          <span className="text-sm">Powered by <Link href="https://polar.sh" className="underline-offset-4 hover:underline text-foreground font-medium">Polar</Link></span>
+        <div className="text-muted-foreground mt-6 flex items-center justify-center gap-1">
+          <span className="text-sm">
+            Powered by{' '}
+            <Link
+              href="https://polar.sh"
+              className="text-foreground font-medium underline-offset-4 hover:underline"
+            >
+              Polar
+            </Link>
+          </span>
           <PolarIcon className="h-4 w-4" />
         </div>
       </div>

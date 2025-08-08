@@ -23,7 +23,7 @@ export default function PasswordCard({ user }: { user: User }) {
       <CardContent>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Update your password to keep your account secure. Email will be sent to your account
               email.
             </p>

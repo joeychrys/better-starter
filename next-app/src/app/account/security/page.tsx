@@ -29,7 +29,7 @@ export default async function SecurityPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Security</h1>
-        <p className="text-sm text-muted-foreground">Manage your account security settings.</p>
+        <p className="text-muted-foreground text-sm">Manage your account security settings.</p>
       </div>
 
       <div className="space-y-6 rounded-lg p-4 sm:p-6">

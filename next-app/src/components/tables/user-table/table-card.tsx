@@ -229,7 +229,7 @@ export function TableCard({ data, totalRows, pagination, onPaginationChange }: T
                 </PopoverContent>
               </Popover>
               {!banForm.expirationDate && (
-                <p className="mt-1 text-xs text-muted-foreground">
+                <p className="text-muted-foreground mt-1 text-xs">
                   Select a future date when the ban will expire
                 </p>
               )}

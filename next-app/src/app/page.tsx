@@ -16,7 +16,7 @@ export default async function Home() {
         <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
           Your Ultimate <span className="text-primary">Next.js</span> Starter
         </h1>
-        <p className="mx-auto max-w-3xl text-xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto max-w-3xl text-xl">
           A comprehensive starting point for your Next.js projects with authentication, UI
           components, and everything you need to build modern web applications.
         </p>
@@ -36,39 +36,39 @@ export default async function Home() {
       <section className="space-y-8">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-3xl font-bold">Everything You Need</h2>
-          <p className="mx-auto max-w-2xl text-muted-foreground">
+          <p className="text-muted-foreground mx-auto max-w-2xl">
             This template includes all the essential features to kickstart your Next.js project
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <FeatureCard
-            icon={<Lock className="h-10 w-10 text-primary" />}
+            icon={<Lock className="text-primary h-10 w-10" />}
             title="Authentication Ready"
             description="Secure authentication system with sign-up, sign-in, and user management already implemented."
           />
           <FeatureCard
-            icon={<Palette className="h-10 w-10 text-primary" />}
+            icon={<Palette className="text-primary h-10 w-10" />}
             title="UI Component Library"
             description="Beautiful, accessible UI components built with Tailwind CSS and Radix UI."
           />
           <FeatureCard
-            icon={<Database className="h-10 w-10 text-primary" />}
+            icon={<Database className="text-primary h-10 w-10" />}
             title="Database Integration"
             description="Ready-to-use database setup with migrations and type safety."
           />
           <FeatureCard
-            icon={<Zap className="h-10 w-10 text-primary" />}
+            icon={<Zap className="text-primary h-10 w-10" />}
             title="Performance Optimized"
             description="Built with performance in mind, ensuring fast load times and smooth user experiences."
           />
           <FeatureCard
-            icon={<Code className="h-10 w-10 text-primary" />}
+            icon={<Code className="text-primary h-10 w-10" />}
             title="TypeScript Support"
             description="Full TypeScript support for type safety and better developer experience."
           />
           <FeatureCard
-            icon={<CheckCircle className="h-10 w-10 text-primary" />}
+            icon={<CheckCircle className="text-primary h-10 w-10" />}
             title="Best Practices"
             description="Follows industry best practices for code organization, security, and accessibility."
           />

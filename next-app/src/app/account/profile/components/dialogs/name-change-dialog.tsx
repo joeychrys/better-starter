@@ -61,7 +61,7 @@ export default function NameChangeDialog() {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="mt-2 sm:ml-auto sm:mt-0 sm:flex-shrink-0">
+        <Button variant="outline" className="mt-2 sm:mt-0 sm:ml-auto sm:flex-shrink-0">
           Edit profile
         </Button>
       </DialogTrigger>

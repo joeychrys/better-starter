@@ -43,7 +43,7 @@ export default function LinkedAccountsCard({ userAccounts }: { userAccounts: Use
               </div>
               <div className="flex-1">
                 <p className="font-medium">{formatProvider(account.provider)}</p>
-                <p className="text-sm text-muted-foreground">{date.toDateString()}</p>
+                <p className="text-muted-foreground text-sm">{date.toDateString()}</p>
               </div>
             </div>
           ))}

@@ -20,7 +20,7 @@ export default async function NavBar() {
     });
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b shadow backdrop-blur">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between p-4">
         <div className="flex items-center space-x-4 text-sm">
           <Lock strokeWidth={1.5} className="h-6 w-6" />
@@ -36,7 +36,7 @@ export default async function NavBar() {
         </div>
         <div className="flex items-center space-x-4">
           {session ? (
-            <Suspense fallback={<div className="h-8 w-8 animate-pulse rounded-full bg-muted" />}>
+            <Suspense fallback={<div className="bg-muted h-8 w-8 animate-pulse rounded-full" />}>
               <AvatarDropdown session={JSON.parse(JSON.stringify(session))} />
             </Suspense>
           ) : (

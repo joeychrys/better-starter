@@ -23,7 +23,7 @@ export default async function ProfilePage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Profile details</h1>
-        <p className="text-sm text-muted-foreground">Manage your profile information.</p>
+        <p className="text-muted-foreground text-sm">Manage your profile information.</p>
       </div>
 
       <div className="space-y-6 rounded-lg p-4 sm:p-6">
