@@ -15,31 +15,23 @@ import {
 } from '@/components/ui/card';
 import { authClient } from '@/lib/auth-client';
 
+import { PolarIcon } from '@/components/icons/polar-icon';
+import Link from 'next/link';
+
 const fetchCustomerState = async () => {
   const { data: customerState } = await authClient.customer.state();
   return customerState;
 };
+
+const PolarCustomerPortal = async () => {
+  await authClient.customer.portal();
+}
 
 export default function BillingPage() {
   const { data: customerState, isLoading, error } = useQuery({
     queryKey: ['customer-state'],
     queryFn: fetchCustomerState,
   });
-
-  const handleManageSubscription = async () => {
-    try {
-      // Redirect to Polar customer portal or subscription management
-      // This would need to be implemented based on Polar's customer portal
-      console.log('Manage subscription clicked');
-    } catch (error) {
-      console.error('Failed to manage subscription:', error);
-    }
-  };
-
-  const handleUpgradePlan = async () => {
-    // Redirect to pricing page
-    window.location.href = '/pricing';
-  };
 
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat('en-US', {
@@ -94,7 +86,9 @@ export default function BillingPage() {
             </p>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleUpgradePlan}>View Plans</Button>
+            <Link href="/pricing">
+              <Button>View Plans</Button>
+            </Link>
           </CardFooter>
         </Card>
       </div>
@@ -201,8 +195,8 @@ export default function BillingPage() {
               </div>
             </CardContent>
             <div className="flex justify-between gap-2 p-4">
-              <Button variant="outline" size="sm" className="w-full" onClick={handleUpgradePlan}>
-                Change Plan
+              <Button variant="outline" size="sm" className="w-full" onClick={PolarCustomerPortal}>
+                Manage Subscription
               </Button>
             </div>
           </Card>
@@ -262,6 +256,10 @@ export default function BillingPage() {
             )}
           </CardContent>
         </Card>
+        <div className="flex justify-center items-center gap-1 mt-6 text-muted-foreground">
+          <span className="text-sm">Powered by <Link href="https://polar.sh" className="underline-offset-4 hover:underline text-foreground font-medium">Polar</Link></span>
+          <PolarIcon className="h-4 w-4" />
+        </div>
       </div>
     </div>
   );

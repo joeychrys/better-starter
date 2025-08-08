@@ -15,30 +15,23 @@ import {
 import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
 
+import Link from 'next/link';
+
 export default function Pricing() {
+
   const handleBasicPlan = async () => {
-    await authClient.subscription.upgrade({
-      plan: 'basic',
-      successUrl: '/dashboard',
-      cancelUrl: '/pricing',
-    });
-  };
+    await authClient.checkout({
+      slug: "basic",
+    })
+  }
 
   const handleProPlan = async () => {
-    await authClient.subscription.upgrade({
-      plan: 'pro',
-      successUrl: '/dashboard',
-      cancelUrl: '/pricing',
-    });
-  };
-
-  const handlePolarProPlan = async () => {
     await authClient.checkout({
       slug: "pro",
     })
   }
 
-  const handlePolarTokenPurchase = async () => {
+  const handleTokenPurchase = async () => {
     await authClient.checkout({
       slug: "tokens",
     })
@@ -46,159 +39,180 @@ export default function Pricing() {
 
 
   return (
-    <div className="container mx-auto px-5 py-20">
+    <div className="container mx-auto px-4 py-16 lg:py-24">
+      {/* Header Section */}
       <div className="mb-16 text-center">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">Simple, Transparent Pricing</h1>
-        <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
-          Choose the perfect plan for your AI agent needs. Scale as you grow.
+        <h1 className="mb-4 text-4xl font-bold tracking-tight lg:text-5xl">
+          Simple, Transparent Pricing
+        </h1>
+        <p className="mx-auto max-w-3xl text-lg text-muted-foreground lg:text-xl">
+          Choose the perfect plan for your AI agent needs. Scale as you grow with flexible pricing options.
         </p>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
+      {/* Token Purchase Section */}
+      <div className="mx-auto mb-16 max-w-7xl">
+        <Card className="border-2 border-primary/20">
+          <CardContent className="p-8">
+            <div className="grid gap-8 md:grid-cols-3 md:items-center">
+              {/* Left Section - Header */}
+              <div className="text-center md:text-left">
+                <CardTitle className="mb-3 text-2xl font-bold">Need Extra Tokens?</CardTitle>
+                <CardDescription className="text-base">
+                  Purchase additional tokens to boost your AI agent capabilities
+                </CardDescription>
+              </div>
+
+              {/* Middle Section - Pricing */}
+              <div className="text-center">
+                <div className="flex items-baseline justify-center">
+                  <span className="text-4xl font-bold">$5</span>
+                  <span className="ml-2 text-muted-foreground">/10 tokens</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">One-time purchase</p>
+              </div>
+
+              {/* Right Section - CTA */}
+              <div className="text-center">
+                <Button
+                  size="lg"
+                  className="w-full md:w-auto md:px-8"
+                  onClick={handleTokenPurchase}
+                >
+                  Purchase Tokens
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Pricing Cards */}
+      <div className="mx-auto grid max-w-7xl gap-6 lg:gap-8 md:grid-cols-3">
         {/* Basic Plan */}
-        <Card className="flex h-full flex-col">
-          <CardHeader className="pb-6">
-            <CardTitle className="text-2xl">Basic</CardTitle>
-            <CardDescription className="pt-1.5">
+        <Card className="relative flex h-full flex-col">
+          <CardHeader className="text-center pb-8">
+            <CardTitle className="text-2xl font-semibold">Basic</CardTitle>
+            <CardDescription className="text-base mt-2">
               Perfect for individuals and small teams
             </CardDescription>
-            <div className="mt-4 flex items-end">
-              <span className="text-4xl font-bold">$20</span>
-              <span className="ml-1.5 pb-1 text-muted-foreground">/month</span>
+            <div className="mt-6">
+              <div className="flex items-baseline justify-center">
+                <span className="text-5xl font-bold tracking-tight">$20</span>
+                <span className="ml-2 text-muted-foreground">/month</span>
+              </div>
             </div>
           </CardHeader>
 
-          <CardContent className="flex-grow px-6 pt-2">
-            <ul className="space-y-3.5">
+          <CardContent className="flex-grow px-6">
+            <ul className="space-y-4">
               <Feature>Access to 3 AI agents</Feature>
               <Feature>1,000 queries per month</Feature>
               <Feature>Standard response times</Feature>
-              <Feature>Basic analytics</Feature>
+              <Feature>Basic analytics dashboard</Feature>
               <Feature>Email support</Feature>
             </ul>
           </CardContent>
 
-          <CardFooter className="pt-6">
-            <Button className="w-full" onClick={handleBasicPlan}>
+          <CardFooter className="pt-8">
+            <Button className="w-full" size="lg" onClick={handleBasicPlan}>
               Get Started
             </Button>
           </CardFooter>
         </Card>
 
         {/* Pro Plan */}
-        <Card className="relative flex h-full flex-col border-primary">
-          <Badge variant="default" className="absolute right-4 top-4 z-10">
-            POPULAR
+        <Card className="relative flex h-full flex-col border-primary shadow-lg">
+          <Badge variant="default" className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1">
+            MOST POPULAR
           </Badge>
 
-          <CardHeader className="pb-6">
-            <CardTitle className="text-2xl">Pro</CardTitle>
-            <CardDescription className="pt-1.5">For growing businesses and teams</CardDescription>
-            <div className="mt-4 flex items-end">
-              <span className="text-4xl font-bold">$80</span>
-              <span className="ml-1.5 pb-1 text-muted-foreground">/month</span>
+          <CardHeader className="text-center pb-8">
+            <CardTitle className="text-2xl font-semibold">Pro</CardTitle>
+            <CardDescription className="text-base mt-2">
+              For growing businesses and productive teams
+            </CardDescription>
+            <div className="mt-6">
+              <div className="flex items-baseline justify-center">
+                <span className="text-5xl font-bold tracking-tight">$80</span>
+                <span className="ml-2 text-muted-foreground">/month</span>
+              </div>
             </div>
           </CardHeader>
 
-          <CardContent className="flex-grow px-6 pt-2">
-            <ul className="space-y-3.5">
+          <CardContent className="flex-grow px-6">
+            <ul className="space-y-4">
               <Feature highlighted>Access to 10 AI agents</Feature>
               <Feature highlighted>10,000 queries per month</Feature>
-              <Feature highlighted>Faster response times</Feature>
-              <Feature>Advanced analytics</Feature>
+              <Feature highlighted>Priority response times</Feature>
+              <Feature>Advanced analytics & insights</Feature>
               <Feature>Priority email support</Feature>
-              <Feature>API access</Feature>
+              <Feature>Full API access</Feature>
               <Feature>Custom integrations</Feature>
             </ul>
           </CardContent>
 
-          <CardFooter className="pt-6">
-            <Button className="w-full bg-primary" onClick={handlePolarProPlan}>
+          <CardFooter className="pt-8">
+            <Button className="w-full" size="lg" onClick={handleProPlan}>
               Get Started
             </Button>
           </CardFooter>
         </Card>
 
         {/* Enterprise Plan */}
-        <Card className="flex h-full flex-col">
-          <CardHeader className="pb-6">
-            <CardTitle className="text-2xl">Enterprise</CardTitle>
-            <CardDescription className="pt-1.5">
-              For large organizations with specific needs
+        <Card className="relative flex h-full flex-col">
+          <CardHeader className="text-center pb-8">
+            <CardTitle className="text-2xl font-semibold">Enterprise</CardTitle>
+            <CardDescription className="text-base mt-2">
+              For large organizations with custom requirements
             </CardDescription>
-            <div className="mt-4 flex items-end">
-              <span className="text-4xl font-bold">Custom</span>
-              <span className="ml-1.5 pb-1 text-muted-foreground"> pricing</span>
+            <div className="mt-6">
+              <div className="flex items-baseline justify-center">
+                <span className="text-5xl font-bold tracking-tight">Custom</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">Pricing tailored to your needs</p>
             </div>
           </CardHeader>
 
-          <CardContent className="flex-grow px-6 pt-2">
-            <ul className="space-y-3.5">
+          <CardContent className="flex-grow px-6">
+            <ul className="space-y-4">
               <Feature>Unlimited AI agents</Feature>
               <Feature>Unlimited queries</Feature>
               <Feature>Fastest response times</Feature>
-              <Feature>Enterprise-grade analytics</Feature>
+              <Feature>Enterprise analytics suite</Feature>
               <Feature>24/7 dedicated support</Feature>
-              <Feature>Advanced API access</Feature>
+              <Feature>Advanced API & webhooks</Feature>
               <Feature>Custom AI agent development</Feature>
               <Feature>SLA guarantees</Feature>
               <Feature>Dedicated account manager</Feature>
             </ul>
           </CardContent>
 
-          <CardFooter className="pt-6">
-            <Button
-              className="w-full"
-              variant="outline"
-              onClick={() => (window.location.href = '/contact')}
-            >
-              Contact Sales
-            </Button>
+          <CardFooter className="pt-8">
+            <Link href="/contact" className="w-full">
+              <Button
+                className="w-full"
+                variant="outline"
+                size="lg"
+              >
+                Contact Sales
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       </div>
 
-      {/* Token Purchase Card */}
-      <div className="mx-auto mt-20 max-w-6xl">
-        <Card className="border-primary/20">
-          <div className="grid gap-6 p-8 md:grid-cols-3 md:items-center">
-            {/* Left Section - Header */}
-            <div className="text-center md:text-left">
-              <CardTitle className="mb-2 text-2xl font-bold">Need More Tokens?</CardTitle>
-              <CardDescription>
-                Purchase additional tokens for your AI agents
-              </CardDescription>
-            </div>
-
-            {/* Middle Section - Pricing */}
-            <div className="text-center">
-              <div className="text-4xl font-bold">$5</div>
-              <div className="text-muted-foreground">for 10 tokens</div>
-            </div>
-
-            {/* Right Section - CTA */}
-            <div className="text-center">
-              <Button
-                size="lg"
-                className="w-full md:w-auto md:px-8"
-                onClick={handlePolarTokenPurchase}
-              >
-                Purchase Tokens
-              </Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      <div className="mt-20 text-center">
-        <h3 className="mb-4 text-xl font-semibold">Need something specific?</h3>
-        <p className="mx-auto mb-8 max-w-2xl text-muted-foreground">
-          Contact our sales team to customize a plan that perfectly fits your organization&apos;s
-          requirements.
-        </p>
-        <Button variant="outline" size="lg">
-          Schedule a Demo
-        </Button>
+      {/* CTA Section */}
+      <div className="mt-24 text-center">
+        <div className="mx-auto max-w-3xl">
+          <h3 className="mb-4 text-2xl font-semibold">Need something more specific?</h3>
+          <p className="mx-auto mb-8 text-lg text-muted-foreground">
+            Contact our sales team to customize a plan that perfectly fits your organization's unique requirements and scale.
+          </p>
+          <Button variant="outline" size="lg" className="px-8">
+            Schedule a Demo
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -212,11 +226,19 @@ function Feature({
   highlighted?: boolean;
 }) {
   return (
-    <li className="flex items-start">
+    <li className="flex items-start gap-3">
       <Check
-        className={cn('mr-2.5 h-5 w-5 shrink-0', highlighted ? 'text-primary' : 'text-primary/70')}
+        className={cn(
+          'h-5 w-5 shrink-0 mt-0.5',
+          highlighted ? 'text-primary' : 'text-primary/70'
+        )}
       />
-      <span className={highlighted ? 'font-medium' : ''}>{children}</span>
+      <span className={cn(
+        'text-sm leading-relaxed',
+        highlighted ? 'font-medium text-foreground' : 'text-muted-foreground'
+      )}>
+        {children}
+      </span>
     </li>
   );
 }
