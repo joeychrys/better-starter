@@ -1,6 +1,17 @@
 log:
   level: INFO
 
+accessLog:
+  filePath: /var/log/traefik/access.log
+  bufferingSize: 100
+  format: common
+
+experimental:
+  plugins:
+    bouncer:
+      moduleName: github.com/crowdsecurity/traefik-plugin-bouncer
+      version: v1.5.0
+
 entryPoints:
   web:
     # http
@@ -33,6 +44,7 @@ http:
         - web-secure
       middlewares:
         - csrf
+        - crowdsec
       service: next-app
       tls:
         # https://doc.traefik.io/traefik/routing/routers/#certresolver
@@ -44,6 +56,17 @@ http:
       # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
       headers:
         hostsProxyHeaders: ['X-CSRFToken']
+    crowdsec:
+      plugin:
+        bouncer:
+          enabled: true
+          crowdsecMode: stream
+          crowdsecLapiScheme: http
+          crowdsecLapiHost: crowdsec:8080
+          crowdsecLapiKey: ${CROWDSEC_BOUNCER_API_KEY}
+          # If Traefik is behind an upstream proxy/load balancer, consider:
+          # forwardedheaderstrustedips: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+          # forwardedHeadersCustomName: X-Real-Ip
 
   services:
     next-app:
