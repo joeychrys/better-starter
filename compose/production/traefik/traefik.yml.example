@@ -63,7 +63,7 @@ http:
           crowdsecMode: stream
           crowdsecLapiScheme: http
           crowdsecLapiHost: host.docker.internal:8080
-          crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
+          crowdsecLapiKey:${CROWDSEC_LAPI_KEY}
           crowdsecLapiPath: /
           crowdsecAppsecEnabled: true
           crowdsecAppsecHost: host.docker.internal:7422
