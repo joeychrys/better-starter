@@ -24,7 +24,7 @@ services:
       - production_traefik:/etc/traefik/acme
       - production_traefik_logs:/var/log/traefik
     env_file:
-      - ./.envs/.production/traefik
+      - ./.envs/.production/.traefik
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     ports:
