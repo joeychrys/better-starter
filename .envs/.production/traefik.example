@@ -1,0 +1,2 @@
+# CrowdSec LAPI key generated via `sudo cscli bouncers add traefik-plugin`
+CROWDSEC_LAPI_KEY=

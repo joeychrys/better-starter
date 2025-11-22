@@ -8,9 +8,9 @@ accessLog:
 
 experimental:
   plugins:
-    bouncer:
-      moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
-      version: v1.4.5
+    crowdsec-bouncer-traefik-plugin:
+      moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      version: "v1.4.6"
 
 entryPoints:
   web:
@@ -58,14 +58,15 @@ http:
         hostsProxyHeaders: ['X-CSRFToken']
     crowdsec:
       plugin:
-        bouncer:
+        crowdsec-bouncer-traefik-plugin:
           enabled: true
           crowdsecMode: stream
           crowdsecLapiScheme: http
-          crowdsecLapiHost: crowdsec:8080
-          crowdsecLapiKey: ${CROWDSEC_BOUNCER_API_KEY}
+          crowdsecLapiHost: host.docker.internal:8080
+          crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
+          crowdsecLapiPath: /
           crowdsecAppsecEnabled: true
-          crowdsecAppsecHost: crowdsec:7422
+          crowdsecAppsecHost: host.docker.internal:7422
           crowdsecAppsecPath: /
           crowdsecAppsecFailureBlock: true
           crowdsecAppsecUnreachableBlock: true
@@ -73,6 +74,8 @@ http:
           # If Traefik is behind an upstream proxy/load balancer, consider:
           # forwardedheaderstrustedips: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
           # forwardedHeadersCustomName: X-Real-Ip
+
+
 
   services:
     next-app:
