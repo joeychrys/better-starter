@@ -6,6 +6,9 @@
 # Timezone for logs and CrowdSec runtime
 TZ=UTC
 
+# Hub collections installed at container start (keep quotes for spaces)
+COLLECTIONS="crowdsecurity/traefik crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules"
+
 # Bouncer Key (Generate the key with cscli bouncers add traefik-plugin in the crowdsec container.)
 CROWDSEC_BOUNCER_API_KEY=
 
