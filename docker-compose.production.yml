@@ -26,6 +26,9 @@ services:
       - production_crowdsec_data:/var/lib/crowdsec/data
       - production_crowdsec_config:/etc/crowdsec
       - production_traefik_logs:/var/log/traefik:ro
+      # Bind-mount committed config files, while keeping /etc/crowdsec writable via the named volume
+      - ./compose/production/crowdsec/config/config.yaml:/etc/crowdsec/config.yaml:ro
+      - ./compose/production/crowdsec/config/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
     env_file:
       - ./.envs/.production/.crowdsec
 

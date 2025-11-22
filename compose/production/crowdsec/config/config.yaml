@@ -1,0 +1,18 @@
+common:
+  daemonize: false
+  log_media: file
+  log_level: info
+  log_dir: /var/log/crowdsec
+
+config_paths:
+  config_dir: /etc/crowdsec
+  data_dir: /var/lib/crowdsec/data
+  db_path: /var/lib/crowdsec/data/crowdsec.db
+  hub_dir: /etc/crowdsec/hub
+  simulation_path: /etc/crowdsec/simulation.yaml
+  acquis_path: /etc/crowdsec/acquis.yaml
+
+cscli:
+  output: human
+
+
