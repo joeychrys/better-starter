@@ -14,25 +14,20 @@ experimental:
 
 entryPoints:
   web:
-    # http
     address: ':80'
     http:
-      # https://doc.traefik.io/traefik/routing/entrypoints/#entrypoint
       redirections:
         entryPoint:
           to: web-secure
 
   web-secure:
-    # https
     address: ':443'
 
 certificatesResolvers:
   letsencrypt:
-    # https://doc.traefik.io/traefik/https/acme/#lets-encrypt
     acme:
       email: 'example@example.com'
       storage: /etc/traefik/acme/acme.json
-      # https://doc.traefik.io/traefik/https/acme/#httpchallenge
       httpChallenge:
         entryPoint: web
 
@@ -47,35 +42,17 @@ http:
         - crowdsec
       service: next-app
       tls:
-        # https://doc.traefik.io/traefik/routing/routers/#certresolver
         certResolver: letsencrypt
 
   middlewares:
     csrf:
-      # https://doc.traefik.io/traefik/master/middlewares/http/headers/#hostsproxyheaders
-      # https://docs.djangoproject.com/en/dev/ref/csrf/#ajax
       headers:
         hostsProxyHeaders: ['X-CSRFToken']
     crowdsec:
       plugin:
         crowdsec-bouncer-traefik-plugin:
           enabled: true
-          crowdsecMode: stream
-          crowdsecLapiScheme: http
-          crowdsecLapiHost: host.docker.internal:8080
-          crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
-          crowdsecLapiPath: /
-          crowdsecAppsecEnabled: true
-          crowdsecAppsecHost: host.docker.internal:7422
-          crowdsecAppsecPath: /
-          crowdsecAppsecFailureBlock: true
-          crowdsecAppsecUnreachableBlock: true
-          crowdsecAppsecBodyLimit: 10485760
-          # If Traefik is behind an upstream proxy/load balancer, consider:
-          # forwardedheaderstrustedips: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
-          # forwardedHeadersCustomName: X-Real-Ip
-
-
+          crowdseclapikey: ${CROWDSEC_LAPI_KEY}
 
   services:
     next-app:
@@ -84,7 +61,6 @@ http:
           - url: http://next-app:3000
 
 providers:
-  # https://doc.traefik.io/traefik/master/providers/file/
   file:
     filename: /etc/traefik/traefik.yml
     watch: true
