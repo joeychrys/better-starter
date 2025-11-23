@@ -52,7 +52,12 @@ http:
       plugin:
         crowdsec-bouncer-traefik-plugin:
           enabled: true
-          crowdseclapikey: ${CROWDSEC_LAPI_KEY}
+          crowdsecMode: stream
+          crowdsecLapiScheme: http
+          crowdsecLapiHost: crowdsec:8080
+          crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
+          crowdsecLapiPath: /
+          crowdsecAppsecEnabled: false
 
   services:
     next-app:
