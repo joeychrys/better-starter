@@ -1,6 +1,5 @@
 volumes:
   production_traefik: {}
-  production_traefik_logs: {}
   production_crowdsec_data: {}
   production_crowdsec_config: {}
 
@@ -20,17 +19,15 @@ services:
     container_name: crowdsec
     restart: unless-stopped
     environment:
-      - TZ: "UTC"
-      - PGID: "1000"
-      - COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve"
+      TZ: UTC
+      PGID: "1000"
+      COLLECTIONS: crowdsecurity/traefik crowdsecurity/http-cve
     expose:
-      - "8080"
+      - '8080'
     volumes:
-      - /var/log/crowdsec:/var/log/crowdsec:ro
-      - /opt/crowdsec-db:/var/lib/crowdsec/data
-      - /var/log/auth.log:/var/log/auth.log:ro
-      - /opt/crowdsec:/etc/crowdsec
-      - "./logsTraefik:/var/log/traefik"
+      - production_crowdsec_data:/var/lib/crowdsec/data
+      - production_crowdsec_config:/etc/crowdsec
+      - "./logsTraefik:/var/log/traefik:ro"
     labels:
       traefik.enable: "false"
 
@@ -44,7 +41,6 @@ services:
       - crowdsec
     volumes:
       - production_traefik:/etc/traefik/acme
-      - production_traefik_logs:/var/log/traefik
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - "./logsTraefik:/var/log/traefik"
     env_file:
