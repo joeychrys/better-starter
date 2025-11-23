@@ -1,7 +1,6 @@
 volumes:
   production_traefik: {}
   production_crowdsec_data: {}
-  production_crowdsec_config: {}
 
 services:
   next-app:
@@ -27,7 +26,6 @@ services:
       - '8080'
     volumes:
       - production_crowdsec_data:/var/lib/crowdsec/data
-      - production_crowdsec_config:/etc/crowdsec
       - "./compose/production/crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml"
       - "./logsTraefik:/var/log/traefik:ro"
     labels:
