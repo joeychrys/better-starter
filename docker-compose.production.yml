@@ -22,6 +22,7 @@ services:
       TZ: UTC
       PGID: "1000"
       COLLECTIONS: crowdsecurity/traefik crowdsecurity/http-cve
+      CONFIG_FILE: /etc/crowdsec/config.yaml
     expose:
       - '8080'
     volumes:
