@@ -1,5 +1,7 @@
 volumes:
   production_traefik: {}
+  production_crowdsec_data: {}
+  production_crowdsec_config: {}
 
 
 services:
