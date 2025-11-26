@@ -57,7 +57,8 @@ http:
           crowdsecLapiHost: crowdsec:8080
           crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
           crowdsecLapiPath: /
-          crowdsecAppsecEnabled: false
+          crowdsecAppsecEnabled: true
+          crowdsecAppsecHost: crowdsec:7422
 
   services:
     next-app:

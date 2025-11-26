@@ -24,9 +24,11 @@ services:
       CONFIG_FILE: /etc/crowdsec/config.yaml
     expose:
       - '8080'
+      - '7422'
     volumes:
       - production_crowdsec_data:/var/lib/crowdsec/data
       - "./compose/production/crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml"
+      - "./compose/production/crowdsec/appsec-config.yaml:/etc/crowdsec/acquis.d/appsec.yaml"
       - "./logsTraefik:/var/log/traefik:ro"
     labels:
       traefik.enable: "false"
