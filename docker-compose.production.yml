@@ -1,5 +1,6 @@
 volumes:
   production_traefik: {}
+  production_crowdsec_data: {}
 
 services:
   next-app:
@@ -12,6 +13,26 @@ services:
       - PORT=3000
       - HOSTNAME=0.0.0.0
 
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    restart: unless-stopped
+    environment:
+      TZ: UTC
+      PGID: "1000"
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules crowdsecurity/appsec-crs"
+      CONFIG_FILE: /etc/crowdsec/config.yaml
+    expose:
+      - '8080'
+      - '7422'
+    volumes:
+      - production_crowdsec_data:/var/lib/crowdsec/data
+      - "./compose/production/crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml"
+      - "./compose/production/crowdsec/appsec-config.yaml:/etc/crowdsec/acquis.d/appsec.yaml"
+      - "./logsTraefik:/var/log/traefik:ro"
+    labels:
+      traefik.enable: "false"
+
   traefik:
     build:
       context: .
@@ -19,8 +40,14 @@ services:
     image: production_traefik
     depends_on:
       - next-app
+      - crowdsec
     volumes:
-      - production_traefik:/etc/traefik/acme
+      - "./logsTraefik:/var/log/traefik"
+      - "./acme.json:/etc/traefik/acme/acme.json"
+    env_file:
+      - ./.envs/.production/.traefik
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     ports:
       - '0.0.0.0:80:80'
       - '0.0.0.0:443:443'
