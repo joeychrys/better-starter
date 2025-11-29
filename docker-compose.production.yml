@@ -20,7 +20,7 @@ services:
     environment:
       TZ: UTC
       PGID: "1000"
-      COLLECTIONS: crowdsecurity/traefik crowdsecurity/http-cve
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules crowdsecurity/appsec-crs"
       CONFIG_FILE: /etc/crowdsec/config.yaml
     expose:
       - '8080'
@@ -43,6 +43,7 @@ services:
       - crowdsec
     volumes:
       - "./logsTraefik:/var/log/traefik"
+      - "./acme.json:/etc/traefik/acme/acme.json"
     env_file:
       - ./.envs/.production/.traefik
     extra_hosts:

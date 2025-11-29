@@ -93,12 +93,59 @@ docker-compose -f docker-compose.staging.yml down
 
 The production environment is configured with Traefik for handling HTTPS and routing.
 
+### Prerequisites (SSL Certificates)
+
+Before starting the production environment, you must ensure an `acme.json` file exists on your host machine to store SSL certificates. This file must be kept secure.
+
+```bash
+# Create the file on your host
+touch acme.json
+
+# Set strict permissions (required for Traefik security)
+chmod 600 acme.json
+```
+
+### Running Production
+
 ```bash
 # Build and start production environment
 docker-compose -f docker-compose.production.yml up -d
 
 # Stop the production environment
 docker-compose -f docker-compose.production.yml down
+```
+
+### Security (CrowdSec)
+
+The production setup includes CrowdSec for Intrusion Prevention (IPS) and Web Application Firewall (WAF) capabilities.
+
+**Initial Setup:**
+1. Generate a Bouncer API Key:
+   ```bash
+   docker exec -t crowdsec cscli bouncers add traefik-bouncer
+   ```
+2. Add this key to `.envs/.production/.traefik`:
+   ```env
+   CROWDSEC_LAPI_KEY=your_key_here
+   ```
+3. Restart Traefik:
+   ```bash
+   docker-compose -f docker-compose.production.yml restart traefik
+   ```
+
+**AppSec (WAF) Features:**
+The setup includes the AppSec engine to block SQL injection, XSS, and other web attacks. The configuration files are located in `compose/production/crowdsec/`.
+
+**Useful Commands:**
+```bash
+# View active decisions (bans)
+docker exec -t crowdsec cscli decisions list
+
+# Ban an IP manually
+docker exec -t crowdsec cscli decisions add --ip 1.2.3.4
+
+# Unban an IP
+docker exec -t crowdsec cscli decisions delete --ip 1.2.3.4
 ```
 
 ## Project Structure
