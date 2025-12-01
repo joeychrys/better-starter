@@ -7,7 +7,7 @@ import { protectedRoutes } from '@/lib/protected-routes'; // Import static route
 // Define Session type locally
 type Session = typeof auth.$Infer.Session & { user?: { role?: string } };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Skip checking static files, Next.js internals, and API routes
