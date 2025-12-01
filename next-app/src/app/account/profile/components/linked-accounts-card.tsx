@@ -15,7 +15,7 @@ export default function LinkedAccountsCard({ userAccounts }: { userAccounts: Use
 
   // Filter to only include Google accounts
   const googleAccounts = userAccounts.filter(
-    (account) => account.provider.toLowerCase() === 'google'
+    (account) => account.providerId.toLowerCase() === 'google'
   );
 
   // Don't render if no Google accounts
@@ -42,7 +42,7 @@ export default function LinkedAccountsCard({ userAccounts }: { userAccounts: Use
                 <GoogleIcon />
               </div>
               <div className="flex-1">
-                <p className="font-medium">{formatProvider(account.provider)}</p>
+                <p className="font-medium">{formatProvider(account.providerId)}</p>
                 <p className="text-muted-foreground text-sm">{date.toDateString()}</p>
               </div>
             </div>
