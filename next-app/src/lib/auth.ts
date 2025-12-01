@@ -1,5 +1,5 @@
 import { polar, checkout, portal, usage, webhooks } from '@polar-sh/better-auth';
-import { Polar } from '@polar-sh/sdk';
+import { Polar } from "@polar-sh/sdk"; 
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
@@ -17,6 +17,16 @@ const polarClient = new Polar({
 });
 
 export const auth = betterAuth({
+  user: {
+    deleteUser: {
+      enabled: true,
+      afterDelete: async (user, request) => {
+        await polarClient.customers.deleteExternal({
+          externalId: user.id, 
+        });
+      },
+    }
+  },
   database: drizzleAdapter(db, {
     provider: 'pg',
   }),
