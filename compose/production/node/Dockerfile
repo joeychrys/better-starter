@@ -12,7 +12,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY ./next-app/package.json ./next-app/pnpm-lock.yaml* ./
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # 2. Rebuild the source code only when needed
 FROM base AS builder
@@ -20,10 +20,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY ./next-app ./
 COPY ./.envs/.production/.next ./.env.production
-
-# Install dependencies necessary for build
-COPY ./next-app/package.json ./next-app/pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -51,5 +47,11 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-USER nextjs
+EXPOSE 3000
+
+ENV PORT 3000
+# set hostname to localhost
+ENV HOSTNAME "0.0.0.0"
+
+# CMD ["node", "server.js"]
 
