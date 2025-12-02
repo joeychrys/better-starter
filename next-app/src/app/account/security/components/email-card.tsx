@@ -53,7 +53,7 @@ export default function EmailCard() {
                 variant="destructive"
                 disabled={isVerifying}
                 size="sm"
-                className="mt-2 sm:mt-0 sm:flex-shrink-0"
+                className="mt-2 sm:mt-0 sm:shrink-0"
                 onClick={async () => {
                   await authClient
                     .sendVerificationEmail({

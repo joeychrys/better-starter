@@ -27,6 +27,7 @@ import { SignInFormSchema } from '@/lib/schemas';
 
 export default function SignInPage() {
   const [loading, setLoading] = useState(false);
+  const [googleSignInPending, setGoogleSignInPending] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof SignInFormSchema>>({
@@ -36,6 +37,29 @@ export default function SignInPage() {
       password: '',
     },
   });
+
+  async function handleGoogleSignIn() {
+    try {
+      await authClient.signIn.social({
+        provider: 'google',
+        fetchOptions: {
+          onRequest: () => setGoogleSignInPending(true),
+          onResponse: () => setGoogleSignInPending(false),
+          onError: (ctx) => {
+            toast.error(`Uh Oh! ${ctx.error.message}`);
+          },
+        },
+      });
+    } catch (error: unknown) {
+      let errorMessage = 'Failed to sign in with Google';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      toast.error(`Error: ${errorMessage}`);
+    } finally {
+      setGoogleSignInPending(false);
+    }
+  }
 
   async function onSubmit(data: z.infer<typeof SignInFormSchema>) {
     await authClient.signIn.email({
@@ -112,11 +136,18 @@ export default function SignInPage() {
                 </span>
               </div>
               <Button
-                onClick={() => authClient.signIn.social({ provider: 'google' })}
+                onClick={handleGoogleSignIn}
                 variant={'outline'}
+                disabled={googleSignInPending}
               >
-                <GoogleIcon />
-                Sign in with Google
+                <div className="flex h-4 w-4 items-center justify-center">
+                  {googleSignInPending ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <GoogleIcon />
+                  )}
+                </div>
+                <span className="text-sm">Sign in with Google</span>
               </Button>
 
               {/* Sign Up Link */}
