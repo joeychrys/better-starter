@@ -44,7 +44,7 @@ export default function EmailCard() {
               <Button
                 variant="default"
                 size="sm"
-                className="mt-2 bg-green-100 text-green-800 hover:cursor-default hover:bg-green-100 sm:mt-0 sm:flex-shrink-0"
+                className="mt-2 bg-green-100 text-green-800 hover:cursor-default hover:bg-green-100 sm:mt-0 sm:shrink-0"
               >
                 Verified
               </Button>
@@ -53,7 +53,7 @@ export default function EmailCard() {
                 variant="destructive"
                 disabled={isVerifying}
                 size="sm"
-                className="mt-2 sm:mt-0 sm:flex-shrink-0"
+                className="mt-2 sm:mt-0 sm:shrink-0"
                 onClick={async () => {
                   await authClient
                     .sendVerificationEmail({

@@ -33,7 +33,7 @@ export default function PasswordCard({ user }: { user: User }) {
             variant="destructive"
             onClick={async () => {
               setSending(true);
-              await authClient.forgetPassword({
+              await authClient.requestPasswordReset({
                 email: user.email,
                 redirectTo: '/reset-password',
                 fetchOptions: {

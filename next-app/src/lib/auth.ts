@@ -1,5 +1,5 @@
 import { polar, checkout, portal, usage, webhooks } from '@polar-sh/better-auth';
-import { Polar } from "@polar-sh/sdk"; 
+import { Polar } from '@polar-sh/sdk';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
@@ -8,6 +8,8 @@ import { Resend } from 'resend';
 
 import { ResetPasswordEmail } from '@/components/email-templates/reset-password';
 import { VerificationEmail } from '@/components/email-templates/verification-email';
+import { DeleteAccountEmail } from '@/components/email-templates/account-deletion-email';
+
 import db from '@/db';
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
@@ -20,12 +22,20 @@ export const auth = betterAuth({
   user: {
     deleteUser: {
       enabled: true,
-      afterDelete: async (user, request) => {
-        await polarClient.customers.deleteExternal({
-          externalId: user.id, 
+      sendDeleteAccountVerification: async ({ user, url, token }) => {
+        await resend.emails.send({
+          from: 'Next Starter <account-services@joeychrys.com>',
+          to: user.email,
+          subject: 'Verify your account deletion',
+          react: DeleteAccountEmail({ user, url }) as React.ReactElement,
         });
       },
-    }
+      afterDelete: async (user, request) => {
+        await polarClient.customers.deleteExternal({
+          externalId: user.id,
+        });
+      },
+    },
   },
   database: drizzleAdapter(db, {
     provider: 'pg',
@@ -34,7 +44,7 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       await resend.emails.send({
-        from: 'Next Starter <reset@joeychrys.com>',
+        from: 'Next Starter <account-services@joeychrys.com>',
         to: user.email,
         subject: 'Reset your password',
         react: ResetPasswordEmail({ user, url }) as React.ReactElement,
@@ -52,7 +62,7 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       await resend.emails.send({
-        from: 'Next Starter <verify@joeychrys.com>',
+        from: 'Next Starter <account-services@joeychrys.com>',
         to: user.email,
         subject: 'Verify your email address',
         react: VerificationEmail({ user, url }) as React.ReactElement,

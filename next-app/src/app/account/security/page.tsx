@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 import EmailCard from './components/email-card';
 import PasswordCard from './components/password-card';
 import SessionsCard from './components/sessions-card';
+import DeleteAccountCard from './components/delete-account-card';
 
 export default async function SecurityPage() {
   const [activeSessions, userAccounts, user] = await Promise.all([
@@ -23,7 +24,7 @@ export default async function SecurityPage() {
     throw redirect('/sign-in');
   });
 
-  const isCredentialAccount = userAccounts.some((account) => account.provider === 'credential');
+  const isCredentialAccount = userAccounts.some((account) => account.providerId === 'credential');
 
   return (
     <div className="space-y-8">
@@ -36,6 +37,7 @@ export default async function SecurityPage() {
         <EmailCard />
         {user?.user.emailVerified && isCredentialAccount && <PasswordCard user={user.user} />}
         <SessionsCard activeSessions={JSON.parse(JSON.stringify(activeSessions))} />
+        <DeleteAccountCard />
       </div>
     </div>
   );

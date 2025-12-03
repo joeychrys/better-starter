@@ -147,8 +147,10 @@ export default function SignUpPage() {
                 onClick={() => authClient.signIn.social({ provider: 'google' })}
                 variant={'outline'}
               >
-                <GoogleIcon />
-                Sign up with Google
+                <div className="flex h-4 w-4 items-center justify-center">
+                  <GoogleIcon />
+                </div>
+                <span className="text-sm">Sign up with Google</span>
               </Button>
             </div>
           </CardContent>

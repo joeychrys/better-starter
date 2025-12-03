@@ -38,7 +38,7 @@ export default function LinkedAccountsCard({ userAccounts }: { userAccounts: Use
         <div className="space-y-3">
           {googleAccounts.map((account) => (
             <div key={account.id} className="flex items-center gap-3 rounded-md">
-              <div className="h-8 w-8">
+              <div className="flex h-10 w-10 items-center justify-center">
                 <GoogleIcon />
               </div>
               <div className="flex-1">

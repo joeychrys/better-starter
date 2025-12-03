@@ -1,6 +1,7 @@
 volumes:
   production_traefik: {}
-  production_crowdsec_data: {}
+  crowdsec_data: {}
+  crowdsec_config: {}
 
 services:
   next-app:
@@ -14,22 +15,22 @@ services:
       - HOSTNAME=0.0.0.0
 
   crowdsec:
-    image: crowdsecurity/crowdsec:latest
+    image: crowdsecurity/crowdsec
     container_name: crowdsec
     restart: unless-stopped
     environment:
       TZ: UTC
       PGID: "1000"
       COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules crowdsecurity/appsec-crs"
-      CONFIG_FILE: /etc/crowdsec/config.yaml
     expose:
       - '8080'
       - '7422'
     volumes:
-      - production_crowdsec_data:/var/lib/crowdsec/data
-      - "./compose/production/crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml"
-      - "./compose/production/crowdsec/appsec-config.yaml:/etc/crowdsec/acquis.d/appsec.yaml"
-      - "./logsTraefik:/var/log/traefik:ro"
+      - ./compose/production/crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml
+      - ./compose/production/crowdsec/appsec-config.yaml:/etc/crowdsec/acquis.d/appsec.yaml
+      - crowdsec_data:/var/lib/crowdsec/data/
+      - crowdsec_config:/etc/crowdsec/
+      - ./logsTraefik:/var/log/traefik:ro
     labels:
       traefik.enable: "false"
 
