@@ -17,7 +17,7 @@ services:
   crowdsec:
     build:
       context: .
-    image: crowdsecurity/crowdsec:latest
+    image: crowdsecurity/crowdsec
     container_name: crowdsec
     restart: unless-stopped
     environment:
