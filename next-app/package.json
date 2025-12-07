@@ -16,7 +16,7 @@
     "staging:logs": "cd .. && docker-compose -f docker-compose.staging.yml logs -f"
   },
   "dependencies": {
-    "@better-fetch/fetch": "^1.1.19",
+    "@better-fetch/fetch": "1.1.18",
     "@hookform/resolvers": "^5.2.2",
     "@libsql/client": "^0.15.15",
     "@neondatabase/serverless": "^1.0.2",
@@ -112,6 +112,12 @@
       "allowedVersions": {
         "next": "16"
       }
-    }
+    },
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
   }
 }
