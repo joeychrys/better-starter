@@ -20,15 +20,15 @@ export default async function NavBar() {
     });
 
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b shadow backdrop-blur">
+    <header className="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b shadow backdrop-blur">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between p-4">
         <div className="flex items-center space-x-4 text-sm">
           <Lock strokeWidth={1.5} className="h-6 w-6" />
           <Link href="/" className="underline-offset-4 hover:underline">
             Home
           </Link>
-          <Link href="/dashboard" className="underline-offset-4 hover:underline">
-            Dashboard
+          <Link href="/chat" className="underline-offset-4 hover:underline">
+            Chat
           </Link>
           <Link href="/pricing" className="underline-offset-4 hover:underline">
             Pricing
