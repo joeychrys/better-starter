@@ -27,8 +27,8 @@ export default async function NavBar() {
           <Link href="/" className="underline-offset-4 hover:underline">
             Home
           </Link>
-          <Link href="/dashboard" className="underline-offset-4 hover:underline">
-            Dashboard
+          <Link href="/chat" className="underline-offset-4 hover:underline">
+            Chat
           </Link>
           <Link href="/pricing" className="underline-offset-4 hover:underline">
             Pricing

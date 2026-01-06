@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           'bg-background text-foreground min-h-svh font-sans antialiased',
@@ -27,7 +27,12 @@ export default function RootLayout({
           GeistMono.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider 
+          attribute="class" 
+          defaultTheme="dark" 
+          enableSystem 
+          disableTransitionOnChange
+        >
           <Providers>
             <div className="flex min-h-svh flex-col">
               <NavBar />

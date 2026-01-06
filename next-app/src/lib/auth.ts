@@ -13,7 +13,7 @@ import { DeleteAccountEmail } from '@/components/email-templates/account-deletio
 import db from '@/db';
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
-const polarClient = new Polar({
+export const polarClient = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
   server: 'sandbox',
 });

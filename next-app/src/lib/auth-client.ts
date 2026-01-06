@@ -1,4 +1,4 @@
-import { polarClient } from '@polar-sh/better-auth';
+import { polarClient } from "@polar-sh/better-auth/client";
 import { adminClient } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 
@@ -7,5 +7,5 @@ const baseURL = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 export const authClient = createAuthClient({
   baseURL, // will use current origin if empty
-  plugins: [adminClient(), polarClient()],
+  plugins: [polarClient(), adminClient()],
 });
