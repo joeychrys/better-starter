@@ -3,7 +3,7 @@ import { Polar } from '@polar-sh/sdk';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
-import { admin, openAPI } from 'better-auth/plugins';
+import { admin, openAPI, jwt } from 'better-auth/plugins';
 import { Resend } from 'resend';
 
 import { ResetPasswordEmail } from '@/components/email-templates/reset-password';
@@ -73,6 +73,7 @@ export const auth = betterAuth({
     openAPI(),
     admin(),
     nextCookies(),
+    jwt(),
     polar({
       client: polarClient,
       createCustomerOnSignUp: true,
