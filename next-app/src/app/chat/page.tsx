@@ -2,13 +2,14 @@
 
 import type { Message } from '@langchain/langgraph-sdk';
 import { useStream } from '@langchain/langgraph-sdk/react';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { useAuthJwt } from '@/hooks/use-auth-jwt';
 
 import { ChatInput, ChatSkeleton, EmptyState, MessageList } from './components';
 
-export default function ChatPage() {
+function ChatContent() {
   const searchParams = useSearchParams();
   const threadId = searchParams.get('thread');
 
@@ -59,5 +60,13 @@ export default function ChatPage() {
         onStop={() => thread.stop()}
       />
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<ChatSkeleton />}>
+      <ChatContent />
+    </Suspense>
   );
 }
