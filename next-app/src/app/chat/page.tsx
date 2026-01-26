@@ -16,7 +16,7 @@ function ChatContent() {
   const { data: jwt } = useAuthJwt();
 
   const thread = useStream<{ messages: Message[] }>({
-    apiUrl: 'http://localhost:8000',
+    apiUrl: process.env.NEXT_PUBLIC_LANGGRAPH_URL || 'http://localhost:8000',
     assistantId: 'agent',
     messagesKey: 'messages',
     threadId: threadId ?? undefined,

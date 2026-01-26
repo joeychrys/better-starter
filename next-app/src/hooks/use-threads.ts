@@ -10,7 +10,7 @@ export function useThreads() {
     queryKey: ['threads', jwt],
     queryFn: async () => {
       const client = new Client({
-        apiUrl: 'http://localhost:8000',
+        apiUrl: process.env.NEXT_PUBLIC_LANGGRAPH_URL || 'http://localhost:8000',
         defaultHeaders: {
           ...(jwt && { Authorization: `Bearer ${jwt}` }),
         },
