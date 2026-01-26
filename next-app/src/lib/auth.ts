@@ -73,7 +73,15 @@ export const auth = betterAuth({
     openAPI(),
     admin(),
     nextCookies(),
-    jwt(),
+    jwt({
+      jwt: {
+        definePayload: ({ user }) => {
+          return {
+            name: user.name,
+          };
+        },
+      },
+    }),
     polar({
       client: polarClient,
       createCustomerOnSignUp: true,

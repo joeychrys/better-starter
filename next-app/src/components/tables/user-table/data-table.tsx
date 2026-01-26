@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable react-hooks/incompatible-library */
 import {
   ColumnDef,
   flexRender,

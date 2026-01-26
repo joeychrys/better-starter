@@ -102,7 +102,7 @@ export default function Pricing() {
             </div>
           </CardHeader>
 
-          <CardContent className="flex-grow px-6">
+          <CardContent className="grow px-6">
             <ul className="space-y-4">
               <Feature>Access to 3 AI agents</Feature>
               <Feature>1,000 queries per month</Feature>
@@ -138,7 +138,7 @@ export default function Pricing() {
             </div>
           </CardHeader>
 
-          <CardContent className="flex-grow px-6">
+          <CardContent className="grow px-6">
             <ul className="space-y-4">
               <Feature highlighted>Access to 10 AI agents</Feature>
               <Feature highlighted>10,000 queries per month</Feature>
@@ -172,7 +172,7 @@ export default function Pricing() {
             </div>
           </CardHeader>
 
-          <CardContent className="flex-grow px-6">
+          <CardContent className="grow px-6">
             <ul className="space-y-4">
               <Feature>Unlimited AI agents</Feature>
               <Feature>Unlimited queries</Feature>
