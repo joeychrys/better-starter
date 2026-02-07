@@ -67,6 +67,11 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN pnpm run build
 
+# 2.5. Install migration-only dependencies (isolated from app)
+FROM base AS migrate-deps
+WORKDIR /migrate
+RUN npm init -y && npm install drizzle-orm pg
+
 # 3. Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -89,10 +94,11 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy migration files and script for on-demand database migrations
-# Run via Dokploy's "Run Command" feature: node migrate.mjs
-COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./drizzle
-COPY --from=builder --chown=nextjs:nodejs /app/migrate.mjs ./migrate.mjs
+# Copy migration script, SQL files, and isolated dependencies
+# Run via Dokploy's "Run Command" feature: node migrate/migrate.mjs
+COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./migrate/drizzle
+COPY --from=builder --chown=nextjs:nodejs /app/migrate.mjs ./migrate/migrate.mjs
+COPY --from=migrate-deps --chown=nextjs:nodejs /migrate/node_modules ./migrate/node_modules
 
 # Copy entrypoint script for runtime placeholder replacement
 # Must be done before switching to nextjs user, and needs proper ownership
