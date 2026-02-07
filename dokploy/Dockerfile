@@ -90,11 +90,16 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Drizzle tooling for on-demand database management via Dokploy terminal:
-#   npx drizzle-kit migrate | push | pull
+#   drizzle-kit migrate | push | pull
+# Installed in an isolated directory so pnpm doesn't clobber the standalone node_modules.
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder --chown=nextjs:nodejs /app/src/db/schema.ts ./src/db/schema.ts
 COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./src/drizzle
-RUN pnpm add drizzle-kit drizzle-orm pg
+RUN mkdir -p /app/drizzle-tools && \
+    cd /app/drizzle-tools && \
+    pnpm init && \
+    pnpm add drizzle-kit drizzle-orm pg
+ENV PATH="/app/drizzle-tools/node_modules/.bin:$PATH"
 
 # Copy entrypoint script for runtime placeholder replacement
 # Must be done before switching to nextjs user, and needs proper ownership

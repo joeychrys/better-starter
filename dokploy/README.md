@@ -49,7 +49,7 @@ The final production image. It assembles the minimal runtime from the previous s
 1. **Standalone output** from `builder` -- `server.js`, traced `node_modules`, compiled code
 2. **Static assets** from `builder` -- `.next/static/`
 3. **Drizzle files** from `builder` -- `drizzle.config.ts`, `src/db/schema.ts`, `src/drizzle/*.sql` (copied to their original paths so drizzle-kit commands work the same as in local dev)
-4. **Drizzle tooling** -- `drizzle-kit`, `drizzle-orm`, and `pg` are installed via `pnpm add` directly in the runner. The standalone output only traces modules the app imports at runtime, so `drizzle-kit` (a CLI tool) wouldn't be available otherwise.
+4. **Drizzle tooling** -- `drizzle-kit`, `drizzle-orm`, and `pg` are installed in an isolated `/app/drizzle-tools/` directory to avoid clobbering the standalone output's traced `node_modules`. The `drizzle-kit` binary is added to `PATH` so it works directly from `/app/`.
 5. **Entrypoint script** -- `scripts/entrypoint.sh` for `NEXT_PUBLIC_*` placeholder replacement
 
 The container runs as a non-root user (`nextjs:nodejs`, uid/gid 1001) and exposes port 3000.
@@ -110,15 +110,15 @@ Dokploy then pulls the new image and restarts the container with the environment
 The production image includes `drizzle-kit` and all Drizzle source files at their original paths. To run migrations after a deployment, open the **Terminal** in Dokploy's application dashboard and run:
 
 ```bash
-npx drizzle-kit migrate
+drizzle-kit migrate
 ```
 
 Other Drizzle commands also work:
 
 ```bash
-npx drizzle-kit push       # Push schema changes directly
-npx drizzle-kit pull       # Introspect the production database
-npx drizzle-kit studio     # Open Drizzle Studio (requires port access)
+drizzle-kit push       # Push schema changes directly
+drizzle-kit pull       # Introspect the production database
+drizzle-kit studio     # Open Drizzle Studio (requires port access)
 ```
 
 Migrations are **not** run automatically on deploy. You only need to run them when a deployment includes schema changes.
