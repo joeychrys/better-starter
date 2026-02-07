@@ -38,16 +38,7 @@ Copies the installed `node_modules` from `deps` and the full `next-app/` source 
 
 **Build-time environment variables:** Server-side env vars (`DATABASE_URL`, `RESEND_API_KEY`, etc.) are passed as build args. These only need to satisfy module initialization during the build -- they don't need to be real credentials. `NEXT_PUBLIC_*` vars use placeholder values (`https://PLACEHOLDER_REPLACE_ME_*`) that get replaced at container start by `entrypoint.sh`. This placeholder-and-replace pattern is based on [a very heated discussion on Next.js's repo.](https://github.com/vercel/next.js/discussions/17641#discussioncomment-9376344)
 
-### Stage 4: `migrate-deps`
-
-```dockerfile
-FROM base AS migrate-deps
-RUN npm init -y && npm install drizzle-kit drizzle-orm pg
-```
-
-Installs Drizzle tooling (`drizzle-kit`, `drizzle-orm`, `pg`) for on-demand database management in production. This stage runs **in parallel** with the `builder` stage, so it adds no extra build time. These packages are needed because the standalone output only traces modules the app imports -- `drizzle-kit` is a CLI tool that's never imported, so it wouldn't be available otherwise.
-
-### Stage 5: `runner`
+### Stage 4: `runner`
 
 ```dockerfile
 FROM base AS runner
@@ -58,7 +49,7 @@ The final production image. It assembles the minimal runtime from the previous s
 1. **Standalone output** from `builder` -- `server.js`, traced `node_modules`, compiled code
 2. **Static assets** from `builder` -- `.next/static/`
 3. **Drizzle files** from `builder` -- `drizzle.config.ts`, `src/db/schema.ts`, `src/drizzle/*.sql` (copied to their original paths so drizzle-kit commands work the same as in local dev)
-4. **Drizzle node_modules** from `migrate-deps` -- `drizzle-kit`, `drizzle-orm`, `pg`
+4. **Drizzle tooling** -- `drizzle-kit`, `drizzle-orm`, and `pg` are installed via `npm install` directly in the runner. The standalone output only traces modules the app imports at runtime, so `drizzle-kit` (a CLI tool) wouldn't be available otherwise.
 5. **Entrypoint script** -- `scripts/entrypoint.sh` for `NEXT_PUBLIC_*` placeholder replacement
 
 The container runs as a non-root user (`nextjs:nodejs`, uid/gid 1001) and exposes port 3000.
@@ -66,10 +57,7 @@ The container runs as a non-root user (`nextjs:nodejs`, uid/gid 1001) and expose
 ### Build stage execution order
 
 ```
-deps ─────────> builder ─────────> runner
-                                     ^
-migrate-deps ────────────────────────┘
-(runs in parallel with builder)
+deps ──────> builder ──────> runner
 ```
 
 ## Deploying with Dokploy

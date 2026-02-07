@@ -67,11 +67,6 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN pnpm run build
 
-# 2.5. Install Drizzle tooling for on-demand database management (runs in parallel with app build)
-FROM base AS migrate-deps
-WORKDIR /migrate
-RUN npm init -y && npm install drizzle-kit drizzle-orm pg
-
 # 3. Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
@@ -99,7 +94,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder --chown=nextjs:nodejs /app/src/db/schema.ts ./src/db/schema.ts
 COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./src/drizzle
-COPY --from=migrate-deps --chown=nextjs:nodejs /migrate/node_modules ./node_modules
+RUN npm install --no-save drizzle-kit drizzle-orm pg
 
 # Copy entrypoint script for runtime placeholder replacement
 # Must be done before switching to nextjs user, and needs proper ownership
