@@ -89,6 +89,11 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Copy migration files and script for on-demand database migrations
+# Run via Dokploy's "Run Command" feature: node migrate.mjs
+COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./drizzle
+COPY --from=builder --chown=nextjs:nodejs /app/migrate.mjs ./migrate.mjs
+
 # Copy entrypoint script for runtime placeholder replacement
 # Must be done before switching to nextjs user, and needs proper ownership
 COPY --chown=nextjs:nodejs scripts/entrypoint.sh /app/entrypoint.sh
