@@ -4,6 +4,11 @@ name: PR Validation
 on:
   pull_request:
     branches: ['master']
+    paths:
+      - 'next-app/**'
+      - 'dokploy/**'
+      - 'scripts/**'
+      - '.github/workflows/pr-validation.yml'
 
 jobs:
   # Fast checks - lint, format, type check
