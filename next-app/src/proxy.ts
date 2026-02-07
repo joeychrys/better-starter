@@ -22,7 +22,7 @@ export async function proxy(request: NextRequest) {
 
   // Get the session
   const { data: session } = await betterFetch<Session>('/api/auth/get-session', {
-    baseURL: 'http://next-app:3000',
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
     headers: {
       cookie: request.headers.get('cookie') || '',
     },
