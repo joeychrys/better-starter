@@ -67,10 +67,10 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN pnpm run build
 
-# 2.5. Install migration-only dependencies (isolated from app)
+# 2.5. Install Drizzle tooling for on-demand database management (runs in parallel with app build)
 FROM base AS migrate-deps
 WORKDIR /migrate
-RUN npm init -y && npm install drizzle-orm pg
+RUN npm init -y && npm install drizzle-kit drizzle-orm pg
 
 # 3. Production image, copy all the files and run next
 FROM base AS runner
@@ -94,11 +94,12 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy migration script, SQL files, and isolated dependencies
-# Run via Dokploy's "Run Command" feature: node migrate/migrate.mjs
-COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./migrate/drizzle
-COPY --from=builder --chown=nextjs:nodejs /app/migrate.mjs ./migrate/migrate.mjs
-COPY --from=migrate-deps --chown=nextjs:nodejs /migrate/node_modules ./migrate/node_modules
+# Drizzle tooling for on-demand database management via Dokploy terminal:
+#   npx drizzle-kit migrate | push | pull
+COPY --from=builder --chown=nextjs:nodejs /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder --chown=nextjs:nodejs /app/src/db/schema.ts ./src/db/schema.ts
+COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./src/drizzle
+COPY --from=migrate-deps --chown=nextjs:nodejs /migrate/node_modules ./node_modules
 
 # Copy entrypoint script for runtime placeholder replacement
 # Must be done before switching to nextjs user, and needs proper ownership
