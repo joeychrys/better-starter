@@ -94,7 +94,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle.config.ts ./drizzle.config.ts
 COPY --from=builder --chown=nextjs:nodejs /app/src/db/schema.ts ./src/db/schema.ts
 COPY --from=builder --chown=nextjs:nodejs /app/src/drizzle ./src/drizzle
-RUN npm install --no-save drizzle-kit drizzle-orm pg
+RUN pnpm add drizzle-kit drizzle-orm pg
 
 # Copy entrypoint script for runtime placeholder replacement
 # Must be done before switching to nextjs user, and needs proper ownership
