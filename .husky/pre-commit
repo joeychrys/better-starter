@@ -1,0 +1,1 @@
+cd next-app && pnpm exec lint-staged

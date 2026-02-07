@@ -12,18 +12,19 @@ import { DeleteAccountEmail } from '@/components/email-templates/account-deletio
 
 import db from '@/db';
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
-const polarClient = new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
-  server: 'sandbox',
-});
+const getResend = () => new Resend(process.env.RESEND_API_KEY!);
+const getPolarClient = () =>
+  new Polar({
+    accessToken: process.env.POLAR_ACCESS_TOKEN,
+    server: 'sandbox',
+  });
 
 export const auth = betterAuth({
   user: {
     deleteUser: {
       enabled: true,
       sendDeleteAccountVerification: async ({ user, url, token }) => {
-        await resend.emails.send({
+        await getResend().emails.send({
           from: 'Next Starter <account-services@joeychrys.com>',
           to: user.email,
           subject: 'Verify your account deletion',
@@ -31,7 +32,7 @@ export const auth = betterAuth({
         });
       },
       afterDelete: async (user, request) => {
-        await polarClient.customers.deleteExternal({
+        await getPolarClient().customers.deleteExternal({
           externalId: user.id,
         });
       },
@@ -43,7 +44,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: 'Next Starter <account-services@joeychrys.com>',
         to: user.email,
         subject: 'Reset your password',
@@ -61,7 +62,7 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      await resend.emails.send({
+      await getResend().emails.send({
         from: 'Next Starter <account-services@joeychrys.com>',
         to: user.email,
         subject: 'Verify your email address',
@@ -75,7 +76,7 @@ export const auth = betterAuth({
     nextCookies(),
     jwt(),
     polar({
-      client: polarClient,
+      client: getPolarClient(),
       createCustomerOnSignUp: true,
       use: [
         checkout({

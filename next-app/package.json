@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "better-starter",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,10 +10,20 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "lint:fix": "eslint . --fix",
-    "staging:build": "cd .. && docker-compose -f docker-compose.staging.yml build",
-    "staging:up": "cd .. && docker-compose -f docker-compose.staging.yml up -d",
-    "staging:down": "cd .. && docker-compose -f docker-compose.staging.yml down",
-    "staging:logs": "cd .. && docker-compose -f docker-compose.staging.yml logs -f"
+    "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
+    "db:push": "dotenv -e .env.local -- drizzle-kit push",
+    "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
+    "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
+    "prepare": "cd .. && husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@better-fetch/fetch": "1.1.18",
@@ -96,6 +106,8 @@
     "eslint-config-next": "16.0.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "postcss": "^8.5.6",
     "prettier": "3.7.3",
     "tailwindcss": "^4.1.17",
