@@ -1,4 +1,3 @@
- 
 // @ts-nocheck
 'use client';
 
@@ -98,17 +97,17 @@ const ChartTooltip = RechartsPrimitive.Tooltip;
 
 interface ChartTooltipContentProps {
   active?: boolean;
-  payload?: any[];  
-  label?: any;  
+  payload?: any[];
+  label?: any;
   hideLabel?: boolean;
   hideIndicator?: boolean;
   indicator?: 'line' | 'dot' | 'dashed';
   nameKey?: string;
   labelKey?: string;
   className?: string;
-  labelFormatter?: (value: any, name: any) => React.ReactNode;  
+  labelFormatter?: (value: any, name: any) => React.ReactNode;
   labelClassName?: string;
-  formatter?: (value: any, name: any) => React.ReactNode;  
+  formatter?: (value: any, name: any) => React.ReactNode;
   color?: string;
 }
 
