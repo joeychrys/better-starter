@@ -117,3 +117,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Grid background pattern */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 64px 64px;
+  --grid-color: oklch(0.274 0.006 286.033 / 7%);
+}
+
+.dark .bg-grid {
+  --grid-color: oklch(0.92 0.004 286.32 / 2%);
+}
+
+/* Grid with fade mask */
+.bg-grid-fade {
+  mask-image: linear-gradient(to bottom, white, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, white, transparent);
+}
