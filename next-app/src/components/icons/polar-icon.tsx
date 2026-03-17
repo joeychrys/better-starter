@@ -1,13 +1,13 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils"
 
 interface PolarIconProps {
-  className?: string;
+  className?: string
 }
 
 export const PolarIcon = ({ className }: PolarIconProps) => {
   return (
     <svg
-      className={cn('h-6 w-6', className)}
+      className={cn("h-6 w-6", className)}
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       fill="none"
@@ -38,5 +38,5 @@ export const PolarIcon = ({ className }: PolarIconProps) => {
         strokeLinejoin="round"
       />
     </svg>
-  );
-};
+  )
+}

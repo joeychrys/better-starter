@@ -1,27 +1,35 @@
-'use client';
+"use client"
 
-import { Mail } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { Mail } from "lucide-react"
+import { useState } from "react"
+import { toast } from "sonner"
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { authClient } from '@/lib/auth-client';
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { authClient } from "@/lib/auth-client"
 
 export default function EmailCard() {
-  const { data: session } = authClient.useSession();
-  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const { data: session } = authClient.useSession()
+  const [isVerifying, setIsVerifying] = useState<boolean>(false)
 
   if (!session) {
     return (
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Security</h1>
-          <p className="text-muted-foreground text-sm">Loading your security information...</p>
+          <p className="text-sm text-muted-foreground">
+            Loading your security information...
+          </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -29,9 +37,13 @@ export default function EmailCard() {
       <CardHeader className="pb-2">
         <div className="mb-2 flex items-center gap-2">
           <Mail className="h-5 w-5" />
-          <CardTitle className="text-lg font-medium">Email verification</CardTitle>
+          <CardTitle className="text-lg font-medium">
+            Email verification
+          </CardTitle>
         </div>
-        <CardDescription>Verify your email address to secure your account</CardDescription>
+        <CardDescription>
+          Verify your email address to secure your account
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="">
@@ -58,16 +70,16 @@ export default function EmailCard() {
                   await authClient
                     .sendVerificationEmail({
                       email: session.user.email,
-                      callbackURL: '/account/security',
+                      callbackURL: "/account/security",
                     })
                     .then(() => {
-                      toast.success('Verification email sent');
-                      setIsVerifying(true);
+                      toast.success("Verification email sent")
+                      setIsVerifying(true)
                     })
                     .catch((error) => {
-                      toast.error(error.message);
-                      setIsVerifying(false);
-                    });
+                      toast.error(error.message)
+                      setIsVerifying(false)
+                    })
                 }}
               >
                 Verify Email
@@ -77,5 +89,5 @@ export default function EmailCard() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

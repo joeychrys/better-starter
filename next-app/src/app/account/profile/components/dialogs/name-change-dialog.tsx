@@ -1,14 +1,14 @@
-'use client';
+"use client"
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -17,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -25,50 +25,57 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { authClient } from '@/lib/auth-client';
-import { UsernameFormSchema } from '@/lib/schemas';
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { authClient } from "@/lib/auth-client"
+import { UsernameFormSchema } from "@/lib/schemas"
 
 export default function NameChangeDialog() {
-  const router = useRouter();
-  const { isPending } = authClient.useSession();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const router = useRouter()
+  const { isPending } = authClient.useSession()
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   const form = useForm<z.infer<typeof UsernameFormSchema>>({
     resolver: zodResolver(UsernameFormSchema),
     defaultValues: {
-      name: '',
+      name: "",
     },
-  });
+  })
 
   async function onSubmit(data: z.infer<typeof UsernameFormSchema>) {
     try {
       await authClient.updateUser({
         name: data.name,
-      });
-      toast.success('Profile updated successfully');
-      router.refresh(); // Refresh the page to show the updated profile
-      setDialogOpen(false);
+      })
+      toast.success("Profile updated successfully")
+      router.refresh() // Refresh the page to show the updated profile
+      setDialogOpen(false)
     } catch (error: unknown) {
-      let errorMessage = 'Failed to update profile';
+      let errorMessage = "Failed to update profile"
       if (error instanceof Error) {
-        errorMessage = `Error: ${error.message}`;
+        errorMessage = `Error: ${error.message}`
       }
-      toast.error(errorMessage);
+      toast.error(errorMessage)
     }
   }
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="mt-2 sm:mt-0 sm:ml-auto sm:flex-shrink-0">
-          Edit profile
-        </Button>
+      <DialogTrigger
+        render={
+          <Button
+            variant="outline"
+            className="mt-2 sm:mt-0 sm:ml-auto sm:flex-shrink-0"
+          />
+        }
+      >
+        Edit profile
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Profile</DialogTitle>
-          <DialogDescription>Make changes to your profile information here.</DialogDescription>
+          <DialogDescription>
+            Make changes to your profile information here.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -93,7 +100,7 @@ export default function NameChangeDialog() {
                     Saving...
                   </>
                 ) : (
-                  'Save changes'
+                  "Save changes"
                 )}
               </Button>
             </DialogFooter>
@@ -101,5 +108,5 @@ export default function NameChangeDialog() {
         </Form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

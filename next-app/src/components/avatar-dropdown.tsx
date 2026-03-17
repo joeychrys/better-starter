@@ -1,74 +1,100 @@
-'use client';
+"use client"
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { LogOut, Receipt, Shield, User } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { authClient as client } from '@/lib/auth-client';
-import { Session } from '@/lib/types';
+} from "@/components/ui/dropdown-menu"
+import { authClient as client } from "@/lib/auth-client"
+import { Session } from "@/lib/types"
 
 export default function AvatarDropdown(props: { session: Session | null }) {
-  const router = useRouter();
-  const { data } = client.useSession();
-  const session = data || props.session;
+  const router = useRouter()
+  const { data } = client.useSession()
+  const session = data || props.session
 
-  // If no user is found, don't render the dropdown
-  if (!session) return null;
-  const user = session.user;
+  if (!session) return null
+  const user = session.user
 
-  // Get the user's initial, ensuring name exists and is a string
   const userInitial =
-    typeof user.name === 'string' && user.name.trim() !== ''
+    typeof user.name === "string" && user.name.trim() !== ""
       ? user.name.charAt(0).toUpperCase()
-      : '?';
+      : "?"
 
   const handleSignOut = async () => {
     await client.signOut({
       fetchOptions: {
         onSuccess: () => {
-          // Redirect to sign-in page
-          router.push('/sign-in');
-          router.refresh();
+          router.push("/sign-in")
+          router.refresh()
         },
       },
-    });
-  };
+    })
+  }
 
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          asChild
-          className="ring-primary transition duration-300 ease-in-out hover:ring"
-        >
-          <Avatar className="shadow">
-            <AvatarFallback>{userInitial}</AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link href="/account/profile">Profile</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/account/security">Security</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/account/billing">Billing</Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
-  );
+    <DropdownMenu>
+      <DropdownMenuTrigger className="rounded-full transition outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+        <Avatar className="h-8 w-8">
+          <AvatarFallback className="text-xs">{userInitial}</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col gap-0.5">
+              <p className="text-sm font-medium">{user.name}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <Link
+            href="/account/profile"
+            className="flex w-full items-center gap-2"
+          >
+            <User className="h-3.5 w-3.5" />
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link
+            href="/account/security"
+            className="flex w-full items-center gap-2"
+          >
+            <Shield className="h-3.5 w-3.5" />
+            Security
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link
+            href="/account/billing"
+            className="flex w-full items-center gap-2"
+          >
+            <Receipt className="h-3.5 w-3.5" />
+            Billing
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleSignOut} variant="destructive">
+          <div className="flex w-full items-center gap-2">
+            <LogOut className="h-3.5 w-3.5" />
+            Sign Out
+          </div>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }

@@ -1,8 +1,14 @@
-import { Card, CardDescription, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { OctagonX } from 'lucide-react';
-import AccountDeletionDialog from './dialogs/account-deletion-dialog';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { OctagonX } from "lucide-react"
+import AccountDeletionDialog from "./dialogs/account-deletion-dialog"
 
 export default function DeleteAccountCard() {
   return (
@@ -13,7 +19,8 @@ export default function DeleteAccountCard() {
           <CardTitle className="text-lg font-medium">Delete Account</CardTitle>
         </div>
         <CardDescription>
-          Delete your account to permanently remove your account and all associated data.
+          Delete your account to permanently remove your account and all
+          associated data.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -21,5 +28,5 @@ export default function DeleteAccountCard() {
         <AccountDeletionDialog />
       </CardContent>
     </Card>
-  );
+  )
 }

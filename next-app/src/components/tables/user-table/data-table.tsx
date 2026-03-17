@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 import {
   ColumnDef,
@@ -7,18 +7,18 @@ import {
   OnChangeFn,
   PaginationState,
   useReactTable,
-} from '@tanstack/react-table';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+} from "@tanstack/react-table"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useState } from "react"
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -26,15 +26,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table"
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  pageCount?: number;
-  totalRows?: number;
-  onPaginationChange?: OnChangeFn<PaginationState>;
-  pagination?: PaginationState;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  pageCount?: number
+  totalRows?: number
+  onPaginationChange?: OnChangeFn<PaginationState>
+  pagination?: PaginationState
 }
 
 export function DataTable<TData, TValue>({
@@ -49,23 +49,25 @@ export function DataTable<TData, TValue>({
   const [localPagination, setLocalPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
-  });
+  })
 
   // Use either provided pagination or local state
-  const paginationState = pagination || localPagination;
-  const setPagination = onPaginationChange || setLocalPagination;
+  const paginationState = pagination || localPagination
+  const setPagination = onPaginationChange || setLocalPagination
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true, // Tell the table we're handling pagination manually
-    pageCount: pageCount ?? Math.ceil((totalRows ?? data.length) / paginationState.pageSize),
+    pageCount:
+      pageCount ??
+      Math.ceil((totalRows ?? data.length) / paginationState.pageSize),
     state: {
       pagination: paginationState,
     },
     onPaginationChange: setPagination,
-  });
+  })
 
   return (
     <div className="space-y-4">
@@ -79,9 +81,12 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -89,17 +94,26 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -110,12 +124,16 @@ export function DataTable<TData, TValue>({
 
       {/* Always render pagination controls */}
       <div className="flex items-center justify-between">
-        <div className="text-muted-foreground text-sm">
-          Showing {data.length > 0 ? paginationState.pageIndex * paginationState.pageSize + 1 : 0}-
+        <div className="text-sm text-muted-foreground">
+          Showing{" "}
+          {data.length > 0
+            ? paginationState.pageIndex * paginationState.pageSize + 1
+            : 0}
+          -
           {Math.min(
             (paginationState.pageIndex + 1) * paginationState.pageSize,
             totalRows || data.length
-          )}{' '}
+          )}{" "}
           of {totalRows || data.length} items
         </div>
         <div className="flex items-center space-x-2">
@@ -130,7 +148,9 @@ export function DataTable<TData, TValue>({
           </Button>
 
           <div className="flex items-center gap-1 text-sm">
-            <span className="font-medium">{table.getState().pagination.pageIndex + 1}</span>
+            <span className="font-medium">
+              {table.getState().pagination.pageIndex + 1}
+            </span>
             <span className="text-muted-foreground">of</span>
             <span className="font-medium">{table.getPageCount()}</span>
           </div>
@@ -148,7 +168,7 @@ export function DataTable<TData, TValue>({
           <Select
             value={table.getState().pagination.pageSize.toString()}
             onValueChange={(value) => {
-              table.setPageSize(Number(value));
+              table.setPageSize(Number(value))
             }}
           >
             <SelectTrigger className="w-[110px]">
@@ -164,5 +184,5 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </div>
-  );
+  )
 }

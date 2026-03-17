@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Toaster } from 'sonner';
+import { ReactNode } from "react"
+import { Toaster } from "sonner"
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
@@ -7,5 +7,5 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       {children}
       <Toaster />
     </div>
-  );
+  )
 }

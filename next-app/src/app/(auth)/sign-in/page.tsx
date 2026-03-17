@@ -1,86 +1,89 @@
-'use client';
+"use client"
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { useForm } from "@tanstack/react-form"
+import { Loader2 } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 
-import { GoogleIcon } from '@/components/icons/google-icon';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { GoogleIcon } from "@/components/icons/google-icon"
+import { Button } from "@/components/ui/button"
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { PasswordInput } from '@/components/ui/password-input';
-import { authClient } from '@/lib/auth-client';
-import { SignInFormSchema } from '@/lib/schemas';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
+import { authClient } from "@/lib/auth-client"
+import { SignInFormSchema } from "@/lib/schemas"
 
 export default function SignInPage() {
-  const [loading, setLoading] = useState(false);
-  const [googleSignInPending, setGoogleSignInPending] = useState(false);
-  const router = useRouter();
+  const [loading, setLoading] = useState(false)
+  const [googleSignInPending, setGoogleSignInPending] = useState(false)
+  const router = useRouter()
 
-  const form = useForm<z.infer<typeof SignInFormSchema>>({
-    resolver: zodResolver(SignInFormSchema),
+  const form = useForm({
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
-  });
+    validators: {
+      onSubmit: SignInFormSchema,
+    },
+    onSubmit: async ({ value }) => {
+      await authClient.signIn.email({
+        email: value.email,
+        password: value.password,
+        callbackURL: "/",
+        fetchOptions: {
+          onResponse: () => {
+            setLoading(false)
+          },
+          onRequest: () => {
+            setLoading(true)
+          },
+          onError: (ctx) => {
+            toast.error(`Uh Oh! ${ctx.error.message}`)
+          },
+          onSuccess: async () => {
+            router.push("/")
+          },
+        },
+      })
+    },
+  })
 
   async function handleGoogleSignIn() {
     try {
       await authClient.signIn.social({
-        provider: 'google',
+        provider: "google",
         fetchOptions: {
           onRequest: () => setGoogleSignInPending(true),
           onResponse: () => setGoogleSignInPending(false),
           onError: (ctx) => {
-            toast.error(`Uh Oh! ${ctx.error.message}`);
+            toast.error(`Uh Oh! ${ctx.error.message}`)
           },
         },
-      });
+      })
     } catch (error: unknown) {
-      let errorMessage = 'Failed to sign in with Google';
+      let errorMessage = "Failed to sign in with Google"
       if (error instanceof Error) {
-        errorMessage = error.message;
+        errorMessage = error.message
       }
-      toast.error(`Error: ${errorMessage}`);
+      toast.error(`Error: ${errorMessage}`)
     } finally {
-      setGoogleSignInPending(false);
+      setGoogleSignInPending(false)
     }
-  }
-
-  async function onSubmit(data: z.infer<typeof SignInFormSchema>) {
-    await authClient.signIn.email({
-      email: data.email,
-      password: data.password,
-      callbackURL: '/',
-      fetchOptions: {
-        onResponse: () => {
-          setLoading(false);
-        },
-        onRequest: () => {
-          setLoading(true);
-        },
-        onError: (ctx) => {
-          toast.error(`Uh Oh! ${ctx.error.message}`);
-        },
-        onSuccess: async () => {
-          router.push('/');
-        },
-      },
-    });
   }
 
   return (
@@ -89,55 +92,88 @@ export default function SignInPage() {
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl">Sign In</CardTitle>
-            <CardDescription>Enter the following information to sign in.</CardDescription>
+            <CardDescription>
+              Enter the following information to sign in.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-6">
               {/* Sign In Form */}
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-2">
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="better@auth.com" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  form.handleSubmit()
+                }}
+                className="flex flex-col gap-6"
+              >
+                <FieldGroup>
+                  <form.Field name="email">
+                    {(field) => {
+                      const isInvalid =
+                        field.state.meta.isTouched && !field.state.meta.isValid
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                          <Input
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            placeholder="better@auth.com"
+                          />
+                          {isInvalid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      )
+                    }}
+                  </form.Field>
 
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem className="grid gap-2">
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <PasswordInput placeholder="" autoComplete="new-password" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" disabled={loading}>
-                    {loading ? <Loader2 size={16} className="animate-spin" /> : 'Sign In'}
-                  </Button>
-                </form>
-              </Form>
+                  <form.Field name="password">
+                    {(field) => {
+                      const isInvalid =
+                        field.state.meta.isTouched && !field.state.meta.isValid
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                          <PasswordInput
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            aria-invalid={isInvalid}
+                            autoComplete="current-password"
+                          />
+                          {isInvalid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      )
+                    }}
+                  </form.Field>
+                </FieldGroup>
+
+                <Button type="submit" disabled={loading}>
+                  {loading ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    "Sign In"
+                  )}
+                </Button>
+              </form>
 
               {/* Social Sign In */}
-              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                <span className="bg-card text-muted-foreground relative z-10 px-2">
+              <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                <span className="relative z-10 bg-card px-2 text-muted-foreground">
                   Or continue with
                 </span>
               </div>
               <Button
                 onClick={handleGoogleSignIn}
-                variant={'outline'}
+                variant={"outline"}
                 disabled={googleSignInPending}
               >
                 <div className="flex h-4 w-4 items-center justify-center">
@@ -153,7 +189,7 @@ export default function SignInPage() {
               {/* Sign Up Link */}
               <div className="flex w-full justify-center space-x-2">
                 <span>Don&apos;t have an account?</span>
-                <Link className="underline" href={'sign-up'}>
+                <Link className="underline" href={"sign-up"}>
                   Sign up
                 </Link>
               </div>
@@ -162,5 +198,5 @@ export default function SignInPage() {
         </Card>
       </section>
     </>
-  );
+  )
 }

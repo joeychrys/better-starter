@@ -1,9 +1,9 @@
-'use client';
+"use client"
 
-import { Fingerprint } from 'lucide-react';
+import { Fingerprint } from "lucide-react"
 
-import { columns } from '@/components/tables/sessions-table/columns';
-import { DataTable } from '@/components/tables/sessions-table/data-table';
+import { columns } from "@/components/tables/sessions-table/columns"
+import { DataTable } from "@/components/tables/sessions-table/data-table"
 import {
   Card,
   CardContent,
@@ -11,12 +11,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Session } from '@/lib/types';
+} from "@/components/ui/card"
+import { Session } from "@/lib/types"
 
-import RevokeSessionsDialog from './dialogs/revoke-sessions-dialog';
+import RevokeSessionsDialog from "./dialogs/revoke-sessions-dialog"
 
-export default function SessionsCard(props: { activeSessions: Session['session'][] }) {
+export default function SessionsCard(props: {
+  activeSessions: Session["session"][]
+}) {
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -35,5 +37,5 @@ export default function SessionsCard(props: { activeSessions: Session['session']
         </CardFooter>
       )}
     </Card>
-  );
+  )
 }
