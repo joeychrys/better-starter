@@ -1,67 +1,69 @@
-'use client';
+"use client"
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { useForm } from "@tanstack/react-form"
+import { Loader2 } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useState } from "react"
+import { toast } from "sonner"
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from "@/components/ui/button"
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { PasswordInput } from '@/components/ui/password-input';
-import { authClient } from '@/lib/auth-client';
-import { ResetPasswordFormSchema } from '@/lib/schemas';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
+import { PasswordInput } from "@/components/ui/password-input"
+import { authClient } from "@/lib/auth-client"
+import { ResetPasswordFormSchema } from "@/lib/schemas"
 
 function ResetPasswordForm() {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token")
 
-  const form = useForm<z.infer<typeof ResetPasswordFormSchema>>({
-    resolver: zodResolver(ResetPasswordFormSchema),
+  const form = useForm({
     defaultValues: {
-      password: '',
-      password2: '',
+      password: "",
+      password2: "",
     },
-  });
-
-  const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+    validators: {
+      onSubmit: ResetPasswordFormSchema,
+    },
+    onSubmit: async ({ value }) => {
+      await authClient.resetPassword({
+        newPassword: value.password,
+        token: token || "123",
+        fetchOptions: {
+          onResponse: () => {
+            setLoading(false)
+          },
+          onRequest: () => {
+            setLoading(true)
+          },
+          onError: (ctx) => {
+            toast.error(`Uh Oh! ${ctx.error.message}`)
+          },
+          onSuccess: async () => {
+            toast.success("Password reset successfully")
+            router.push("/account/security")
+          },
+        },
+      })
+    },
+  })
 
   if (!token) {
-    router.push('/');
-    return null;
-  }
-
-  async function onSubmit(data: z.infer<typeof ResetPasswordFormSchema>) {
-    await authClient.resetPassword({
-      newPassword: data.password,
-      token: token || '123',
-      fetchOptions: {
-        onResponse: () => {
-          setLoading(false);
-        },
-        onRequest: () => {
-          setLoading(true);
-        },
-        onError: (ctx) => {
-          toast.error(`Uh Oh! ${ctx.error.message}`);
-        },
-        onSuccess: async () => {
-          toast.success('Password reset successfully');
-          router.push('/account/security');
-        },
-      },
-    });
+    router.push("/")
+    return null
   }
 
   return (
@@ -75,46 +77,80 @@ function ResetPasswordForm() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-6">
-            {/* Sign Up Form */}
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel>New Password</FormLabel>
-                      <FormControl>
-                        <PasswordInput placeholder="" autoComplete="new-password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                form.handleSubmit()
+              }}
+              className="flex flex-col gap-6"
+            >
+              <FieldGroup>
+                <form.Field name="password">
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          New Password
+                        </FieldLabel>
+                        <PasswordInput
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          autoComplete="new-password"
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    )
+                  }}
+                </form.Field>
 
-                <FormField
-                  control={form.control}
-                  name="password2"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel>Confirm Password</FormLabel>
-                      <FormControl>
-                        <PasswordInput placeholder="" autoComplete="new-password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" disabled={loading}>
-                  {loading ? <Loader2 size={16} className="animate-spin" /> : 'Update Password'}
-                </Button>
-              </form>
-            </Form>
+                <form.Field name="password2">
+                  {(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid
+                    return (
+                      <Field data-invalid={isInvalid}>
+                        <FieldLabel htmlFor={field.name}>
+                          Confirm Password
+                        </FieldLabel>
+                        <PasswordInput
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          autoComplete="new-password"
+                        />
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    )
+                  }}
+                </form.Field>
+              </FieldGroup>
+
+              <Button type="submit" disabled={loading}>
+                {loading ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  "Update Password"
+                )}
+              </Button>
+            </form>
           </div>
         </CardContent>
       </Card>
     </section>
-  );
+  )
 }
 
 export default function ResetPasswordPage() {
@@ -122,5 +158,5 @@ export default function ResetPasswordPage() {
     <Suspense fallback={<div>Loading...</div>}>
       <ResetPasswordForm />
     </Suspense>
-  );
+  )
 }

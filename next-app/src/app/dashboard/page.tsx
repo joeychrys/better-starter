@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 export default function DashboardPage() {
   return (
@@ -9,5 +9,5 @@ export default function DashboardPage() {
         This page is protected and can only be accessed by authenticated users.
       </p>
     </div>
-  );
+  )
 }

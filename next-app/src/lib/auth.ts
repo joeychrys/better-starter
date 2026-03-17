@@ -1,23 +1,23 @@
-import { polar, checkout, portal, usage, webhooks } from '@polar-sh/better-auth';
-import { Polar } from '@polar-sh/sdk';
-import { betterAuth } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { nextCookies } from 'better-auth/next-js';
-import { admin, openAPI, jwt } from 'better-auth/plugins';
-import { Resend } from 'resend';
+import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth"
+import { Polar } from "@polar-sh/sdk"
+import { betterAuth } from "better-auth"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { nextCookies } from "better-auth/next-js"
+import { admin, openAPI, jwt } from "better-auth/plugins"
+import { Resend } from "resend"
 
-import { ResetPasswordEmail } from '@/components/email-templates/reset-password';
-import { VerificationEmail } from '@/components/email-templates/verification-email';
-import { DeleteAccountEmail } from '@/components/email-templates/account-deletion-email';
+import { ResetPasswordEmail } from "@/components/email-templates/reset-password"
+import { VerificationEmail } from "@/components/email-templates/verification-email"
+import { DeleteAccountEmail } from "@/components/email-templates/account-deletion-email"
 
-import db from '@/db';
+import db from "@/db"
 
-const getResend = () => new Resend(process.env.RESEND_API_KEY!);
+const getResend = () => new Resend(process.env.RESEND_API_KEY!)
 const getPolarClient = () =>
   new Polar({
     accessToken: process.env.POLAR_ACCESS_TOKEN,
-    server: 'sandbox',
-  });
+    server: "sandbox",
+  })
 
 export const auth = betterAuth({
   user: {
@@ -25,31 +25,31 @@ export const auth = betterAuth({
       enabled: true,
       sendDeleteAccountVerification: async ({ user, url, token }) => {
         await getResend().emails.send({
-          from: 'Next Starter <account-services@joeychrys.com>',
+          from: "Next Starter <account-services@joeychrys.com>",
           to: user.email,
-          subject: 'Verify your account deletion',
+          subject: "Verify your account deletion",
           react: DeleteAccountEmail({ user, url }) as React.ReactElement,
-        });
+        })
       },
       afterDelete: async (user, request) => {
         await getPolarClient().customers.deleteExternal({
           externalId: user.id,
-        });
+        })
       },
     },
   },
   database: drizzleAdapter(db, {
-    provider: 'pg',
+    provider: "pg",
   }),
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       await getResend().emails.send({
-        from: 'Next Starter <account-services@joeychrys.com>',
+        from: "Next Starter <account-services@joeychrys.com>",
         to: user.email,
-        subject: 'Reset your password',
+        subject: "Reset your password",
         react: ResetPasswordEmail({ user, url }) as React.ReactElement,
-      });
+      })
     },
   },
   socialProviders: {
@@ -63,11 +63,11 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       await getResend().emails.send({
-        from: 'Next Starter <account-services@joeychrys.com>',
+        from: "Next Starter <account-services@joeychrys.com>",
         to: user.email,
-        subject: 'Verify your email address',
+        subject: "Verify your email address",
         react: VerificationEmail({ user, url }) as React.ReactElement,
-      });
+      })
     },
   },
   plugins: [
@@ -82,19 +82,20 @@ export const auth = betterAuth({
         checkout({
           products: [
             {
-              productId: 'f22fe868-afdb-4234-afe7-2766cb373ebd',
-              slug: 'basic',
+              productId: "9402dcea-33d6-4311-a6a0-d6e62a3980a8",
+              slug: "basic",
             },
             {
-              productId: '9813452d-8812-4f49-9d33-a34be797b46b',
-              slug: 'pro',
+              productId: "41ed1276-c3d4-4c83-98d8-2c7fa9a45fac",
+              slug: "pro",
             },
             {
-              productId: 'b85cdce5-fabd-4fb4-b3ff-620893bd795c',
-              slug: 'tokens',
+              productId: "ea5f81cb-7443-4dae-8a04-0a26460d1647",
+              slug: "max",
             },
           ],
           successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?checkout_id={CHECKOUT_ID}`,
+          authenticatedUsersOnly: true,
         }),
         portal(),
         usage(),
@@ -104,4 +105,4 @@ export const auth = betterAuth({
       ],
     }),
   ],
-});
+})

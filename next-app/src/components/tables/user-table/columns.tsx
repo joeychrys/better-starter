@@ -1,19 +1,27 @@
-'use client';
+"use client"
 
-import { ColumnDef } from '@tanstack/react-table';
-import { Key, LockIcon, MoreHorizontal, Shield, Trash, UserCircle } from 'lucide-react';
+import { ColumnDef } from "@tanstack/react-table"
+import {
+  Key,
+  LockIcon,
+  MoreHorizontal,
+  Shield,
+  Trash,
+  UserCircle,
+} from "lucide-react"
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { User } from '@/lib/types';
+} from "@/components/ui/dropdown-menu"
+import { User } from "@/lib/types"
 
 // This is a client component, but columns need to be defined outside the component
 // We'll create a function that returns the columns with the necessary handlers
@@ -26,52 +34,56 @@ export const getColumns = (
   isLoading?: string
 ): ColumnDef<User>[] => [
   {
-    header: 'User',
-    accessorKey: 'name',
+    header: "User",
+    accessorKey: "name",
     cell: ({ row }) => {
-      const user = row.original;
+      const user = row.original
       return (
         <div className="flex items-center gap-3">
-          <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-            <UserCircle className="text-primary h-5 w-5" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+            <UserCircle className="h-5 w-5 text-primary" />
           </div>
           <div className="flex flex-col">
             <div className="font-medium">{user.name}</div>
-            <div className="text-muted-foreground text-sm md:hidden">{user.email}</div>
+            <div className="text-sm text-muted-foreground md:hidden">
+              {user.email}
+            </div>
             <div className="mt-1 flex items-center gap-2 md:hidden">
-              <Badge variant={user.role === 'admin' ? 'default' : 'outline'}>
-                {user.role || 'user'}
+              <Badge variant={user.role === "admin" ? "default" : "outline"}>
+                {user.role || "user"}
               </Badge>
               {user.banned && <Badge variant="destructive">Banned</Badge>}
             </div>
           </div>
         </div>
-      );
+      )
     },
   },
   {
-    header: 'Email',
-    accessorKey: 'email',
+    header: "Email",
+    accessorKey: "email",
     cell: ({ row }) => {
-      return <div className="hidden md:block">{row.original.email}</div>;
+      return <div className="hidden md:block">{row.original.email}</div>
     },
   },
   {
-    header: 'Role',
-    accessorKey: 'role',
+    header: "Role",
+    accessorKey: "role",
     cell: ({ row }) => {
       return (
         <div className="hidden md:block">
-          <Badge variant={row.original.role === 'admin' ? 'default' : 'outline'}>
-            {row.original.role || 'user'}
+          <Badge
+            variant={row.original.role === "admin" ? "default" : "outline"}
+          >
+            {row.original.role || "user"}
           </Badge>
         </div>
-      );
+      )
     },
   },
   {
-    header: 'Status',
-    accessorKey: 'banned',
+    header: "Status",
+    accessorKey: "banned",
     cell: ({ row }) => {
       return (
         <div className="hidden md:block">
@@ -81,41 +93,43 @@ export const getColumns = (
             <Badge variant="outline">Active</Badge>
           )}
         </div>
-      );
+      )
     },
   },
   {
-    id: 'actions',
+    id: "actions",
     header: () => <div className="text-right">Actions</div>,
     cell: ({ row }) => {
-      const user = row.original;
+      const user = row.original
 
       return (
         <div className="text-right">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
-              </Button>
+            <DropdownMenuTrigger
+              render={<Button variant="ghost" size="icon" />}
+            >
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
                   handleImpersonateUser(user.id).then(() => {
-                    window.location.reload();
+                    window.location.reload()
                   })
                 }
-                disabled={isLoading?.startsWith('impersonate')}
+                disabled={isLoading?.startsWith("impersonate")}
               >
                 <UserCircle className="mr-2 h-4 w-4" />
                 Impersonate
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleRevokeSessions(user.id)}
-                disabled={isLoading?.startsWith('revoke')}
+                disabled={isLoading?.startsWith("revoke")}
               >
                 <Key className="mr-2 h-4 w-4" />
                 Revoke Sessions
@@ -124,13 +138,13 @@ export const getColumns = (
               <DropdownMenuItem
                 onClick={() => {
                   if (user.banned) {
-                    handleUnbanUser(user.id);
+                    handleUnbanUser(user.id)
                   } else {
-                    handleBanUser(user.id);
+                    handleBanUser(user.id)
                   }
                 }}
-                disabled={isLoading?.startsWith('ban')}
-                className={user.banned ? 'text-green-600' : 'text-amber-600'}
+                disabled={isLoading?.startsWith("ban")}
+                className={user.banned ? "text-green-600" : "text-amber-600"}
               >
                 {user.banned ? (
                   <>
@@ -146,7 +160,7 @@ export const getColumns = (
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleDeleteUser(user.id)}
-                disabled={isLoading?.startsWith('delete')}
+                disabled={isLoading?.startsWith("delete")}
                 className="text-destructive focus:text-destructive"
               >
                 <Trash className="mr-2 h-4 w-4" />
@@ -155,23 +169,23 @@ export const getColumns = (
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      );
+      )
     },
   },
-];
+]
 
 // Default export for backward compatibility
 export const columns: ColumnDef<User>[] = [
   {
-    header: 'Name',
-    accessorKey: 'name',
+    header: "Name",
+    accessorKey: "name",
   },
   {
-    header: 'Email',
-    accessorKey: 'email',
+    header: "Email",
+    accessorKey: "email",
   },
   {
-    header: 'Role',
-    accessorKey: 'role',
+    header: "Role",
+    accessorKey: "role",
   },
-];
+]
