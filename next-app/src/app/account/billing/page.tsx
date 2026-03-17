@@ -7,14 +7,6 @@ import Link from "next/link"
 import { PolarIcon } from "@/components/icons/polar-icon"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { authClient } from "@/lib/auth-client"
 
 const fetchCustomerState = async () => {
@@ -47,8 +39,8 @@ export default function BillingPage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-medium tracking-tight">Billing</h1>
+          <p className="text-sm leading-relaxed text-muted-foreground">
             Loading subscription information...
           </p>
         </div>
@@ -60,7 +52,7 @@ export default function BillingPage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
+          <h1 className="text-xl font-medium tracking-tight">Billing</h1>
           <p className="text-sm text-destructive">
             Failed to load billing information. Please try again.
           </p>
@@ -73,29 +65,32 @@ export default function BillingPage() {
     return (
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-xl font-medium tracking-tight">Billing</h1>
+          <p className="text-sm leading-relaxed text-muted-foreground">
             You don&apos;t have an active subscription.
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>No Active Subscription</CardTitle>
-            <CardDescription>Choose a plan to get started</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>
+        <div className="rounded-lg border border-border p-6">
+          <div className="flex items-center gap-3">
+            <Package className="h-5 w-5 text-foreground" strokeWidth={1.5} />
+            <span className="font-medium">No Active Subscription</span>
+          </div>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            Choose a plan to get started
+          </p>
+          <div className="mt-5">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               You currently don&apos;t have an active subscription. Select a
               plan to access premium features.
             </p>
-          </CardContent>
-          <CardFooter>
-            <Link href="/pricing">
-              <Button>View Plans</Button>
-            </Link>
-          </CardFooter>
-        </Card>
+            <div className="mt-4">
+              <Link href="/pricing">
+                <Button>View Plans</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -105,8 +100,8 @@ export default function BillingPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Billing</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-xl font-medium tracking-tight">Billing</h1>
+        <p className="text-sm leading-relaxed text-muted-foreground">
           Manage your subscription and view usage information.
         </p>
       </div>
@@ -115,28 +110,22 @@ export default function BillingPage() {
         {/* Top Row: Account Details and Current Plan */}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Account Details */}
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                <CardTitle className="text-lg font-medium">
-                  Account Details
-                </CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="rounded-lg border border-border p-6">
+            <div className="flex items-center gap-3">
+              <User className="h-5 w-5 text-foreground" strokeWidth={1.5} />
+              <span className="font-medium">Account Details</span>
+            </div>
+            <div className="mt-5 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    Name
-                  </p>
-                  <p className="text-sm font-semibold">{customerState.name}</p>
+                  <p className="text-sm text-muted-foreground">Name</p>
+                  <p className="text-sm font-medium">{customerState.name}</p>
                 </div>
               </div>
 
               {customerState.billingAddress && (
                 <div>
-                  <p className="mb-2 text-sm font-medium text-muted-foreground">
+                  <p className="mb-2 text-sm text-muted-foreground">
                     Billing Address
                   </p>
                   <div className="rounded-md bg-muted/50 p-3 text-sm">
@@ -157,67 +146,64 @@ export default function BillingPage() {
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Current Plan */}
-          <Card>
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Package className="h-5 w-5" />
-                  <CardTitle className="text-lg font-medium">
-                    Current Plan
-                  </CardTitle>
-                </div>
-                <Badge
-                  variant="outline"
-                  className={
-                    activeSubscription.status === "active"
-                      ? "border-green-200 bg-green-50 text-green-700"
-                      : "border-amber-200 bg-amber-50 text-amber-700"
-                  }
-                >
-                  {activeSubscription.status}
-                </Badge>
+          <div className="rounded-lg border border-border p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Package
+                  className="h-5 w-5 text-foreground"
+                  strokeWidth={1.5}
+                />
+                <span className="font-medium">Current Plan</span>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="text-center">
-                  <p className="text-3xl font-bold">
-                    {formatCurrency(
-                      activeSubscription.amount,
-                      activeSubscription.currency
-                    )}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    per {activeSubscription.recurringInterval}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-center gap-2 text-sm">
-                  <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    Current period ends{" "}
-                    {activeSubscription.currentPeriodEnd
-                      ? new Date(
-                          activeSubscription.currentPeriodEnd
-                        ).toLocaleDateString()
-                      : "N/A"}
-                  </span>
-                </div>
-
-                {activeSubscription.cancelAtPeriodEnd && (
-                  <div className="rounded-md bg-amber-50 p-3 text-center">
-                    <p className="text-sm text-amber-800">
-                      Subscription will be canceled at period end
-                    </p>
-                  </div>
-                )}
+              <Badge
+                variant="outline"
+                className={
+                  activeSubscription.status === "active"
+                    ? "border-green-200 bg-green-50 text-green-700"
+                    : "border-amber-200 bg-amber-50 text-amber-700"
+                }
+              >
+                {activeSubscription.status}
+              </Badge>
+            </div>
+            <div className="mt-5 space-y-4">
+              <div className="text-center">
+                <p className="text-3xl font-medium">
+                  {formatCurrency(
+                    activeSubscription.amount,
+                    activeSubscription.currency
+                  )}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  per {activeSubscription.recurringInterval}
+                </p>
               </div>
-            </CardContent>
-            <div className="flex justify-between gap-2 p-4">
+
+              <div className="flex items-center justify-center gap-2 text-sm">
+                <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground">
+                  Current period ends{" "}
+                  {activeSubscription.currentPeriodEnd
+                    ? new Date(
+                        activeSubscription.currentPeriodEnd
+                      ).toLocaleDateString()
+                    : "N/A"}
+                </span>
+              </div>
+
+              {activeSubscription.cancelAtPeriodEnd && (
+                <div className="rounded-md bg-amber-50 p-3 text-center">
+                  <p className="text-sm text-amber-800">
+                    Subscription will be canceled at period end
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="mt-4">
               <Button
                 variant="outline"
                 size="sm"
@@ -227,23 +213,19 @@ export default function BillingPage() {
                 Manage Subscription
               </Button>
             </div>
-          </Card>
+          </div>
         </div>
 
         {/* Bottom Row: Usage spanning full width */}
-        <Card>
-          <CardHeader className="pb-4">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
-              <CardTitle className="text-lg font-medium">
-                Usage & Credits
-              </CardTitle>
-            </div>
-            <CardDescription>
-              Monitor your current usage and available credits across all meters
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <div className="rounded-lg border border-border p-6">
+          <div className="flex items-center gap-3">
+            <BarChart3 className="h-5 w-5 text-foreground" strokeWidth={1.5} />
+            <span className="font-medium">Usage & Credits</span>
+          </div>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            Monitor your current usage and available credits across all meters
+          </p>
+          <div className="mt-5">
             {customerState.activeMeters.length > 0 ? (
               <div className="space-y-4">
                 {customerState.activeMeters.map((meter) => {
@@ -255,7 +237,7 @@ export default function BillingPage() {
                   return (
                     <div
                       key={meter.id}
-                      className="w-full rounded-lg border p-4"
+                      className="w-full rounded-lg border border-border p-4"
                     >
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
@@ -292,8 +274,8 @@ export default function BillingPage() {
                 </p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
         <div className="mt-6 flex items-center justify-center gap-1 text-muted-foreground">
           <span className="text-sm">
             Powered by{" "}

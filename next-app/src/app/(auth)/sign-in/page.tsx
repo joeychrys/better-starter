@@ -3,7 +3,7 @@
 import { useForm } from "@tanstack/react-form"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -31,6 +31,8 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false)
   const [googleSignInPending, setGoogleSignInPending] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/"
 
   const form = useForm({
     defaultValues: {
@@ -44,7 +46,7 @@ export default function SignInPage() {
       await authClient.signIn.email({
         email: value.email,
         password: value.password,
-        callbackURL: "/",
+        callbackURL: callbackUrl,
         fetchOptions: {
           onResponse: () => {
             setLoading(false)
@@ -56,7 +58,7 @@ export default function SignInPage() {
             toast.error(`Uh Oh! ${ctx.error.message}`)
           },
           onSuccess: async () => {
-            router.push("/")
+            router.push(callbackUrl)
           },
         },
       })
@@ -189,7 +191,14 @@ export default function SignInPage() {
               {/* Sign Up Link */}
               <div className="flex w-full justify-center space-x-2">
                 <span>Don&apos;t have an account?</span>
-                <Link className="underline" href={"sign-up"}>
+                <Link
+                  className="underline"
+                  href={
+                    callbackUrl !== "/"
+                      ? `/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`
+                      : "/sign-up"
+                  }
+                >
                   Sign up
                 </Link>
               </div>

@@ -2,7 +2,7 @@
 
 import { useForm } from "@tanstack/react-form"
 import { Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
@@ -29,6 +29,8 @@ import { SignUpFormSchema } from "@/lib/schemas"
 export default function SignUpPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/"
 
   const form = useForm({
     defaultValues: {
@@ -45,7 +47,7 @@ export default function SignUpPage() {
         email: value.email,
         password: value.password,
         name: value.name,
-        callbackURL: "/",
+        callbackURL: callbackUrl,
         fetchOptions: {
           onResponse: () => {
             setLoading(false)
@@ -57,7 +59,7 @@ export default function SignUpPage() {
             toast.error(`Uh Oh! ${ctx.error.message}`)
           },
           onSuccess: async () => {
-            router.push("/")
+            router.push(callbackUrl)
             router.refresh()
           },
         },

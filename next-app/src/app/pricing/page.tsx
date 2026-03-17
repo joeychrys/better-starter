@@ -1,29 +1,22 @@
 "use client"
 
 import { Check } from "lucide-react"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
 
 export default function Pricing() {
-  const handleBasicPlan = async () => {
-    await authClient.checkout({
-      slug: "basic",
-    })
-  }
+  const { data: session } = authClient.useSession()
+  const router = useRouter()
 
-  const handleProPlan = async () => {
-    await authClient.checkout({
-      slug: "pro",
-    })
-  }
-
-  const handleMaxPlan = async () => {
-    await authClient.checkout({
-      slug: "max",
-    })
+  const handleCheckout = async (slug: string) => {
+    if (!session) {
+      router.push("/sign-up?callbackUrl=/pricing")
+      return
+    }
+    await authClient.checkout({ slug })
   }
 
   return (
@@ -70,7 +63,7 @@ export default function Pricing() {
               <Feature>Email support</Feature>
             </ul>
 
-            <Button className="w-full" onClick={handleBasicPlan}>
+            <Button className="w-full" onClick={() => handleCheckout("basic")}>
               Get Started
             </Button>
           </div>
@@ -105,7 +98,7 @@ export default function Pricing() {
               <Feature>Custom integrations</Feature>
             </ul>
 
-            <Button className="w-full" onClick={handleProPlan}>
+            <Button className="w-full" onClick={() => handleCheckout("pro")}>
               Get Started
             </Button>
           </div>
@@ -138,7 +131,7 @@ export default function Pricing() {
               <Feature>Dedicated account manager</Feature>
             </ul>
 
-            <Button className="w-full" onClick={handleMaxPlan}>
+            <Button className="w-full" onClick={() => handleCheckout("max")}>
               Get Started
             </Button>
           </div>

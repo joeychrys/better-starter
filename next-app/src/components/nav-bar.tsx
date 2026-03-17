@@ -62,7 +62,7 @@ export default async function NavBar() {
               <AvatarDropdown session={JSON.parse(JSON.stringify(session))} />
             </Suspense>
           ) : (
-            <Button size="sm">
+            <Button variant={"outline"}>
               <Link href="/sign-in">Sign In</Link>
             </Button>
           )}

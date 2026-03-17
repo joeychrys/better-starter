@@ -95,6 +95,7 @@ export const auth = betterAuth({
             },
           ],
           successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?checkout_id={CHECKOUT_ID}`,
+          authenticatedUsersOnly: true,
         }),
         portal(),
         usage(),
