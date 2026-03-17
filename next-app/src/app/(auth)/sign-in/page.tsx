@@ -4,7 +4,7 @@ import { useForm } from "@tanstack/react-form"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { toast } from "sonner"
 
 import { GoogleIcon } from "@/components/icons/google-icon"
@@ -27,7 +27,7 @@ import { PasswordInput } from "@/components/ui/password-input"
 import { authClient } from "@/lib/auth-client"
 import { SignInFormSchema } from "@/lib/schemas"
 
-export default function SignInPage() {
+function SignInForm() {
   const [loading, setLoading] = useState(false)
   const [googleSignInPending, setGoogleSignInPending] = useState(false)
   const router = useRouter()
@@ -207,5 +207,13 @@ export default function SignInPage() {
         </Card>
       </section>
     </>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
   )
 }

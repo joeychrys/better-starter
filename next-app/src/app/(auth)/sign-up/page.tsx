@@ -3,7 +3,7 @@
 import { useForm } from "@tanstack/react-form"
 import { Loader2 } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { toast } from "sonner"
 
 import { GoogleIcon } from "@/components/icons/google-icon"
@@ -26,7 +26,7 @@ import { PasswordInput } from "@/components/ui/password-input"
 import { authClient } from "@/lib/auth-client"
 import { SignUpFormSchema } from "@/lib/schemas"
 
-export default function SignUpPage() {
+function SignUpForm() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -216,5 +216,13 @@ export default function SignUpPage() {
         </Card>
       </section>
     </>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense>
+      <SignUpForm />
+    </Suspense>
   )
 }
