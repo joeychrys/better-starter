@@ -6,7 +6,36 @@ Next.js 16 (App Router) starter with Better Auth, Drizzle ORM (PostgreSQL), Pola
 
 ## Build / Lint / Format Commands
 
-All commands run from `next-app/`:
+A `Makefile` at the repo root wraps all common local-dev commands so they can be run from the project root. The Makefile is for local development only -- it is not used in production. All `pnpm` commands use `pnpm --dir next-app` under the hood.
+
+### Make Targets (preferred -- run from repo root)
+
+```bash
+make dev              # Start dev server (Turbopack)
+make build            # Production build (standalone output)
+make start            # Start production server
+make lint             # ESLint (flat config)
+make lint-fix         # ESLint with auto-fix
+make format           # Prettier write
+make format-check     # Prettier check (CI uses this)
+make setup            # Full local setup: DB + deps + wait + migrations
+make help             # Show all available targets
+```
+
+### Database Commands (Make)
+
+```bash
+make db-generate      # Generate Drizzle migration files
+make db-migrate       # Run Drizzle migrations
+make db-push          # Push schema directly (no migration file)
+make db-studio        # Open Drizzle Studio
+make db-up            # Start local PostgreSQL container
+make db-down          # Stop local PostgreSQL container
+make db-logs          # Tail PostgreSQL container logs
+make db-wait          # Wait for PostgreSQL to accept connections
+```
+
+### pnpm Scripts (alternative -- run from `next-app/`)
 
 ```bash
 pnpm dev              # Start dev server (Turbopack)
@@ -15,11 +44,6 @@ pnpm lint             # ESLint (flat config)
 pnpm lint:fix         # ESLint with auto-fix
 pnpm format           # Prettier write
 pnpm format:check     # Prettier check (CI uses this)
-```
-
-### Database Commands
-
-```bash
 pnpm db:generate      # Generate Drizzle migration files
 pnpm db:migrate       # Run Drizzle migrations
 pnpm db:push          # Push schema directly (no migration file)
@@ -31,8 +55,10 @@ All db commands use `dotenv -e .env.local` to load env vars. Never use `pnpm dlx
 ### Docker (Local)
 
 ```bash
-docker compose -f docker-compose.local.yml up -d   # Start local PostgreSQL
-docker compose -f docker-compose.local.yml down     # Stop
+make db-up                                          # Start local PostgreSQL (preferred)
+make db-down                                        # Stop (preferred)
+docker compose -f docker-compose.local.yml up -d    # Start local PostgreSQL (manual)
+docker compose -f docker-compose.local.yml down      # Stop (manual)
 ```
 
 ### Tests

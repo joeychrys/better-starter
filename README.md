@@ -23,7 +23,36 @@ A Next.js 16 starter with authentication, payments, and a production-ready deplo
 
 Local dev runs two things: the Next.js app on your machine and a PostgreSQL database in Docker.
 
-### 1. Start the database
+### Quick Start (Makefile)
+
+A `Makefile` at the repo root wraps all common commands so you can run everything from the project root without `cd`-ing into `next-app/`. Run `make help` to see all available targets.
+
+```bash
+# 1. Configure environment variables
+cp next-app/.env.local.example next-app/.env.local
+# Edit next-app/.env.local and fill in your keys.
+
+# 2. Full setup: starts DB, installs deps, waits for PG, runs migrations
+make setup
+
+# 3. Start the dev server
+make dev
+```
+
+The database URL for local dev is:
+
+```
+DATABASE_URL=postgresql://user:password@localhost:5432/betterstarter
+```
+
+The app is available at [http://localhost:3000](http://localhost:3000).
+
+### Manual Steps (without Make)
+
+<details>
+<summary>Click to expand manual setup instructions</summary>
+
+**1. Start the database**
 
 ```bash
 docker compose -f docker-compose.local.yml up -d
@@ -31,19 +60,13 @@ docker compose -f docker-compose.local.yml up -d
 
 This starts a PostgreSQL 16 container on port 5432 with default credentials (`user` / `password` / `betterstarter`).
 
-### 2. Configure environment variables
+**2. Configure environment variables**
 
 ```bash
 cp next-app/.env.local.example next-app/.env.local
 ```
 
-Edit `next-app/.env.local` and fill in your keys. The database URL for local dev is:
-
-```
-DATABASE_URL=postgresql://user:password@localhost:5432/betterstarter
-```
-
-### 3. Set up the database schema
+**3. Set up the database schema**
 
 ```bash
 cd next-app
@@ -51,30 +74,40 @@ pnpm install
 pnpm db:push    # push schema to the database
 ```
 
-### 4. Start the dev server
+**4. Start the dev server**
 
 ```bash
 pnpm dev
 ```
 
-The app is available at [http://localhost:3000](http://localhost:3000).
+</details>
 
-### Available Scripts
+### Available Make Targets
 
-All scripts run from `next-app/`:
+Run these from the repo root:
 
-| Command | Description |
+| Target | Description |
 |---|---|
-| `pnpm dev` | Start dev server (Turbopack) |
-| `pnpm build` | Production build |
-| `pnpm lint` | Run ESLint |
-| `pnpm lint:fix` | Run ESLint with auto-fix |
-| `pnpm format` | Format with Prettier |
-| `pnpm format:check` | Check formatting (CI uses this) |
-| `pnpm db:generate` | Generate Drizzle migration files |
-| `pnpm db:migrate` | Apply Drizzle migrations |
-| `pnpm db:push` | Push schema directly (no migration file) |
-| `pnpm db:studio` | Open Drizzle Studio |
+| `make dev` | Start dev server (Turbopack) |
+| `make build` | Production build (standalone output) |
+| `make start` | Start production server |
+| `make lint` | Run ESLint |
+| `make lint-fix` | Run ESLint with auto-fix |
+| `make format` | Format with Prettier |
+| `make format-check` | Check formatting (CI uses this) |
+| `make db-generate` | Generate Drizzle migration files |
+| `make db-migrate` | Run Drizzle migrations |
+| `make db-push` | Push schema directly (no migration file) |
+| `make db-studio` | Open Drizzle Studio |
+| `make db-up` | Start local PostgreSQL container |
+| `make db-down` | Stop local PostgreSQL container |
+| `make db-logs` | Tail PostgreSQL container logs |
+| `make db-wait` | Wait for PostgreSQL to accept connections |
+| `make install` | Install pnpm dependencies |
+| `make setup` | Full local setup (DB + deps + migrations) |
+| `make help` | Show all available targets |
+
+All pnpm scripts are still available inside `next-app/` if you prefer to run them directly.
 
 ### Pre-commit Hook
 
