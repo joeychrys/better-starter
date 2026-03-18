@@ -5,10 +5,14 @@ import { Suspense } from "react"
 import AvatarDropdown from "@/components/avatar-dropdown"
 import { MobileNav } from "@/components/mobile-nav"
 import { ModeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { auth } from "@/lib/auth"
 import { Session } from "@/lib/types"
+
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/pricing", label: "Pricing" },
+]
 
 export default async function NavBar() {
   const session: Session | null = await auth.api
@@ -21,33 +25,19 @@ export default async function NavBar() {
     })
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg supports-backdrop-filter:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-screen-xl items-center gap-6 px-4 sm:px-6">
-        {/* Mobile menu */}
-        <div className="md:hidden">
-          <MobileNav />
-        </div>
-
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg">
+      <div className="mx-auto flex h-14 max-w-screen-xl items-center px-4 sm:px-6">
         {/* Desktop navigation */}
         <nav className="hidden items-center gap-1 md:flex">
-          <Link
-            href="/"
-            className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            Home
-          </Link>
-          <Link
-            href="/dashboard"
-            className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/pricing"
-            className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            Pricing
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         {/* Right side actions */}
@@ -62,13 +52,19 @@ export default async function NavBar() {
               <AvatarDropdown session={JSON.parse(JSON.stringify(session))} />
             </Suspense>
           ) : (
-            <Button variant={"outline"}>
-              <Link href="/sign-in">Sign In</Link>
-            </Button>
+            <Link
+              href="/sign-in"
+              className="inline-flex h-8 items-center justify-center rounded-lg border border-input bg-transparent px-2.5 text-sm font-medium transition outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-input dark:bg-input/30 dark:hover:bg-input/50"
+            >
+              Sign In
+            </Link>
           )}
+          {/* Mobile menu */}
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
         </div>
       </div>
-      <Separator />
     </header>
   )
 }

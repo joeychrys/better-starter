@@ -1,19 +1,13 @@
 "use client"
 
 import { useForm } from "@tanstack/react-form"
-import { Loader2 } from "lucide-react"
+import { Loader2, MoveRight } from "lucide-react"
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useState } from "react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import {
   Field,
   FieldError,
@@ -21,6 +15,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { PasswordInput } from "@/components/ui/password-input"
+import { Separator } from "@/components/ui/separator"
 import { authClient } from "@/lib/auth-client"
 import { ResetPasswordFormSchema } from "@/lib/schemas"
 
@@ -67,95 +62,110 @@ function ResetPasswordForm() {
   }
 
   return (
-    <section className="mx-auto max-w-md p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Reset Password</CardTitle>
-          <CardDescription>
-            Enter the following information to update your password.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-6">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                form.handleSubmit()
+    <div className="flex min-h-svh flex-col items-center justify-center px-4 py-16">
+      <div className="w-full max-w-md space-y-8 rounded-2xl border border-border bg-card p-8 sm:p-10">
+        {/* Header */}
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Reset password
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Enter your new password below.
+          </p>
+        </div>
+
+        <Separator />
+
+        {/* Form */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            form.handleSubmit()
+          }}
+          className="space-y-5"
+        >
+          <FieldGroup>
+            <form.Field name="password">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>New password</FieldLabel>
+                    <PasswordInput
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      autoComplete="new-password"
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )
               }}
-              className="flex flex-col gap-6"
-            >
-              <FieldGroup>
-                <form.Field name="password">
-                  {(field) => {
-                    const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid
-                    return (
-                      <Field data-invalid={isInvalid}>
-                        <FieldLabel htmlFor={field.name}>
-                          New Password
-                        </FieldLabel>
-                        <PasswordInput
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          aria-invalid={isInvalid}
-                          autoComplete="new-password"
-                        />
-                        {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
-                        )}
-                      </Field>
-                    )
-                  }}
-                </form.Field>
+            </form.Field>
 
-                <form.Field name="password2">
-                  {(field) => {
-                    const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid
-                    return (
-                      <Field data-invalid={isInvalid}>
-                        <FieldLabel htmlFor={field.name}>
-                          Confirm Password
-                        </FieldLabel>
-                        <PasswordInput
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          aria-invalid={isInvalid}
-                          autoComplete="new-password"
-                        />
-                        {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
-                        )}
-                      </Field>
-                    )
-                  }}
-                </form.Field>
-              </FieldGroup>
+            <form.Field name="password2">
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      Confirm password
+                    </FieldLabel>
+                    <PasswordInput
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      autoComplete="new-password"
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                )
+              }}
+            </form.Field>
+          </FieldGroup>
 
-              <Button type="submit" disabled={loading}>
-                {loading ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  "Update Password"
-                )}
-              </Button>
-            </form>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
+          <Button type="submit" disabled={loading} size="lg" className="w-full">
+            {loading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <>
+                Continue
+                <MoveRight className="h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </form>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-muted-foreground">
+          Remember your password?{" "}
+          <Link
+            className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
+            href="/sign-in"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </div>
   )
 }
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <ResetPasswordForm />
     </Suspense>
   )

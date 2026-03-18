@@ -4,7 +4,6 @@ import { LogOut, Receipt, Shield, User } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,10 +42,8 @@ export default function AvatarDropdown(props: { session: Session | null }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-full transition outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-        <Avatar className="h-8 w-8">
-          <AvatarFallback className="text-xs">{userInitial}</AvatarFallback>
-        </Avatar>
+      <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg border border-input bg-transparent transition outline-none hover:bg-muted focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-input dark:bg-input/30 dark:hover:bg-input/50">
+        <span className="text-md font-medium">{userInitial}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuGroup>
