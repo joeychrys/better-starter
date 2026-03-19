@@ -2,8 +2,8 @@
 
 import { Fingerprint } from "lucide-react"
 
-import { columns } from "@/components/tables/sessions-table/columns"
-import { DataTable } from "@/components/tables/sessions-table/data-table"
+import { columns } from "@/app/(main)/account/security/components/sessions-table/columns"
+import { DataTable } from "@/app/(main)/account/security/components/sessions-table/data-table"
 import { Session } from "@/lib/types"
 
 import RevokeSessionsDialog from "./dialogs/revoke-sessions-dialog"

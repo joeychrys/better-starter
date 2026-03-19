@@ -12,17 +12,17 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Separator } from "@/components/ui/separator"
 import { authClient as client } from "@/lib/auth-client"
 import { User } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -191,83 +191,87 @@ export function TableCard({
       />
 
       <Dialog open={isBanDialogOpen} onOpenChange={setIsBanDialogOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Ban User</DialogTitle>
             <DialogDescription>
               Set a ban period and reason for this user.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={submitBanUser} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="reason">Reason for ban</Label>
-              <Input
-                id="reason"
-                placeholder="Violation of terms..."
-                value={banForm.reason}
-                onChange={(e) =>
-                  setBanForm({ ...banForm, reason: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="expirationDate">Ban Expiration Date</Label>
-              <Popover>
-                <PopoverTrigger
-                  render={
-                    <Button
-                      id="expirationDate"
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !banForm.expirationDate && "text-muted-foreground"
-                      )}
-                    />
+
+          <Separator />
+
+          <form onSubmit={submitBanUser} className="space-y-5">
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="reason">Reason for ban</FieldLabel>
+                <Input
+                  id="reason"
+                  placeholder="Violation of terms..."
+                  value={banForm.reason}
+                  onChange={(e) =>
+                    setBanForm({ ...banForm, reason: e.target.value })
                   }
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {banForm.expirationDate ? (
-                    format(banForm.expirationDate, "PPP")
-                  ) : (
-                    <span>Select ban expiration date</span>
-                  )}
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={banForm.expirationDate}
-                    onSelect={(date) =>
-                      setBanForm({ ...banForm, expirationDate: date })
+                  required
+                />
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="expirationDate">
+                  Ban expiration date
+                </FieldLabel>
+                <Popover>
+                  <PopoverTrigger
+                    render={
+                      <Button
+                        id="expirationDate"
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !banForm.expirationDate && "text-muted-foreground"
+                        )}
+                      />
                     }
-                    initialFocus
-                    disabled={(date) => date < new Date()}
-                  />
-                </PopoverContent>
-              </Popover>
-              {!banForm.expirationDate && (
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Select a future date when the ban will expire
-                </p>
-              )}
-            </div>
-            <DialogFooter className="mt-6">
-              <Button
-                type="submit"
-                variant="destructive"
-                className="w-full"
-                disabled={isLoading === `ban-${banForm.userId}`}
-              >
-                {isLoading === `ban-${banForm.userId}` ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Banning...
-                  </>
-                ) : (
-                  "Ban User"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {banForm.expirationDate ? (
+                      format(banForm.expirationDate, "PPP")
+                    ) : (
+                      <span>Select ban expiration date</span>
+                    )}
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={banForm.expirationDate}
+                      onSelect={(date) =>
+                        setBanForm({ ...banForm, expirationDate: date })
+                      }
+                      initialFocus
+                      disabled={(date) => date < new Date()}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {!banForm.expirationDate && (
+                  <p className="text-xs text-muted-foreground">
+                    Select a future date when the ban will expire
+                  </p>
                 )}
-              </Button>
-            </DialogFooter>
+              </Field>
+            </FieldGroup>
+
+            <Button
+              type="submit"
+              variant="destructive"
+              className="w-full"
+              disabled={isLoading === `ban-${banForm.userId}`}
+            >
+              {isLoading === `ban-${banForm.userId}` ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                "Ban User"
+              )}
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
