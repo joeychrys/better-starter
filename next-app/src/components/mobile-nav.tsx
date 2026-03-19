@@ -25,11 +25,11 @@ export function MobileNav() {
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger className="inline-flex size-7 items-center justify-center rounded-[min(var(--radius-md),12px)] text-sm font-medium transition outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+      <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg border border-input bg-transparent text-sm font-medium transition outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:border-input dark:bg-input/30 dark:hover:bg-input/50">
         <Menu className="h-4 w-4" />
         <span className="sr-only">Toggle menu</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-44">
+      <DropdownMenuContent align="end" className="w-44">
         {navLinks.map((link) => (
           <DropdownMenuItem key={link.href}>
             <Link
