@@ -66,8 +66,8 @@ jobs:
       - name: Trigger deploy Deployment
         run: |
           curl -X POST \
-            "https://${{ secrets.deploy_URL }}/api/application.deploy" \
+            "https://${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
             -H 'accept: application/json' \
-            -H "x-api-key: ${{ secrets.deploy_API_KEY }}" \
+            -H "x-api-key: ${{ secrets.DOKPLOY_API_KEY }}" \
             -H 'Content-Type: application/json' \
-            -d '{"applicationId": "${{ secrets.deploy_APP_ID }}"}'
+            -d '{"applicationId": "${{ secrets.DOKPLOY_APP_ID }}"}'
