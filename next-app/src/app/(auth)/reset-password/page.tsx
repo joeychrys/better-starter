@@ -4,7 +4,7 @@ import { useForm } from "@tanstack/react-form"
 import { Loader2, MoveRight } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Suspense, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -56,8 +56,13 @@ function ResetPasswordForm() {
     },
   })
 
+  useEffect(() => {
+    if (!token) {
+      router.push("/")
+    }
+  }, [token, router])
+
   if (!token) {
-    router.push("/")
     return null
   }
 

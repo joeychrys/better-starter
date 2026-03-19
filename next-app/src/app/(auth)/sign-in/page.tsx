@@ -137,7 +137,7 @@ function SignInForm() {
                     <div className="flex items-center justify-between">
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                       <Link
-                        href="/reset-password"
+                        href="/forgot-password"
                         className="text-xs text-muted-foreground transition-colors hover:text-foreground"
                       >
                         Forgot password?
