@@ -22,7 +22,7 @@ importers:
         version: 0.15.15
       '@polar-sh/better-auth':
         specifier: ^1.8.3
-        version: 1.8.3(@polar-sh/sdk@0.46.4)(@stripe/react-stripe-js@4.0.2(@stripe/stripe-js@7.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@stripe/stripe-js@7.9.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(better-auth@1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-is@18.3.1)(react@19.2.4)(redux@5.0.1)(zod@4.1.13)
+        version: 1.8.3(@polar-sh/sdk@0.46.4)(@stripe/react-stripe-js@4.0.2(@stripe/stripe-js@7.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@stripe/stripe-js@7.9.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(better-auth@1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-is@18.3.1)(react@19.2.4)(redux@5.0.1)(zod@4.1.13)
       '@polar-sh/sdk':
         specifier: ^0.46.4
         version: 0.46.4
@@ -43,7 +43,7 @@ importers:
         version: 8.21.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       better-auth:
         specifier: ^1.5.5
-        version: 1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       better-sqlite3:
         specifier: ^12.5.0
         version: 12.5.0
@@ -60,8 +60,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       drizzle-orm:
-        specifier: ^0.44.7
-        version: 0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3)
+        specifier: ^0.45.2
+        version: 0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3)
       embla-carousel-react:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.4)
@@ -2329,11 +2329,20 @@ packages:
   '@types/node@22.19.15':
     resolution: {integrity: sha512-F0R/h2+dsy5wJAUe3tAU6oqa2qbWY5TpNfL/RGmo1y38hiyO1w3x2jPtt76wmuaJI4DQnOBu21cNXQ2STIUUWg==}
 
+  '@types/node@22.19.17':
+    resolution: {integrity: sha512-wGdMcf+vPYM6jikpS/qhg6WiqSV/OhG+jeeHT/KlVqxYfD40iYJf9/AE1uQxVWFvU7MipKRkRv8NSHiCGgPr8Q==}
+
   '@types/node@25.5.0':
     resolution: {integrity: sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw==}
 
+  '@types/node@25.5.2':
+    resolution: {integrity: sha512-tO4ZIRKNC+MDWV4qKVZe3Ql/woTnmHDr5JD8UI5hn2pwBrHEwOEMZK7WlNb5RKB6EoJ02gwmQS9OrjuFnZYdpg==}
+
   '@types/pg@8.15.6':
     resolution: {integrity: sha512-NoaMtzhxOrubeL/7UZuNTrejB4MPAJ0RpxZqXQf2qXuVlTPuG6Y8p4u9dKRaue4yjmC7ZhzVO2/Yyyn25znrPQ==}
+
+  '@types/pg@8.20.0':
+    resolution: {integrity: sha512-bEPFOaMAHTEP1EzpvHTbmwR8UsFyHSKsRisLIHVMXnpNefSbGA1bD6CVy+qKjGSqmZqNqBDV2azOBo8TgkcVow==}
 
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
@@ -3126,8 +3135,8 @@ packages:
     resolution: {integrity: sha512-O9EC/miwdnRDY10qRxM8P3Pg8hXe3LyU4ZipReKOgTwn4OqANmftj8XJz1UPUAS6NMHf0E2htjsbQujUTkncCg==}
     hasBin: true
 
-  drizzle-orm@0.44.7:
-    resolution: {integrity: sha512-quIpnYznjU9lHshEOAYLoZ9s3jweleHlZIAWR/jX9gAWNg/JhQ1wj0KGRf7/Zm+obRrYd9GjPVJg790QY9N5AQ==}
+  drizzle-orm@0.45.2:
+    resolution: {integrity: sha512-kY0BSaTNYWnoDMVoyY8uxmyHjpJW1geOmBMdSSicKo9CIIWkSxMIj2rkeSR51b8KAPB7m+qysjuHme5nKP+E5Q==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -4618,6 +4627,9 @@ packages:
   pg-protocol@1.10.3:
     resolution: {integrity: sha512-6DIBgBQaTKDJyxnXaLiLR8wBpQQcGWuAESkRBX/t6OwA8YsqP+iVSiond2EDy6Y/dsGk8rh/jtax3js5NeV7JQ==}
 
+  pg-protocol@1.13.0:
+    resolution: {integrity: sha512-zzdvXfS6v89r6v7OcFCHfHlyG/wvry1ALxZo4LqgUoy7W9xhBDMaqOuMiF3qEV45VqsN6rdlcehHrfDtlCPc8w==}
+
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
     engines: {node: '>=4'}
@@ -4693,6 +4705,7 @@ packages:
   prebuild-install@7.1.3:
     resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
     engines: {node: '>=10'}
+    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
     hasBin: true
 
   prelude-ls@1.2.1:
@@ -5901,12 +5914,12 @@ snapshots:
       nanostores: 1.2.0
       zod: 4.3.6
 
-  '@better-auth/drizzle-adapter@1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))':
+  '@better-auth/drizzle-adapter@1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))':
     dependencies:
       '@better-auth/core': 1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0)
       '@better-auth/utils': 0.3.1
     optionalDependencies:
-      drizzle-orm: 0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3)
+      drizzle-orm: 0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3)
 
   '@better-auth/kysely-adapter@1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(kysely@0.28.12)':
     dependencies:
@@ -6552,8 +6565,8 @@ snapshots:
 
   '@neondatabase/serverless@1.0.2':
     dependencies:
-      '@types/node': 22.19.15
-      '@types/pg': 8.15.6
+      '@types/node': 22.19.17
+      '@types/pg': 8.20.0
     optional: true
 
   '@next/env@16.1.7': {}
@@ -6623,11 +6636,11 @@ snapshots:
 
   '@pkgr/core@0.2.9': {}
 
-  '@polar-sh/better-auth@1.8.3(@polar-sh/sdk@0.46.4)(@stripe/react-stripe-js@4.0.2(@stripe/stripe-js@7.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@stripe/stripe-js@7.9.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(better-auth@1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-is@18.3.1)(react@19.2.4)(redux@5.0.1)(zod@4.1.13)':
+  '@polar-sh/better-auth@1.8.3(@polar-sh/sdk@0.46.4)(@stripe/react-stripe-js@4.0.2(@stripe/stripe-js@7.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@stripe/stripe-js@7.9.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(better-auth@1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react-is@18.3.1)(react@19.2.4)(redux@5.0.1)(zod@4.1.13)':
     dependencies:
       '@polar-sh/checkout': 0.2.0(@stripe/react-stripe-js@4.0.2(@stripe/stripe-js@7.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@stripe/stripe-js@7.9.0)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react-is@18.3.1)(react@19.2.4)(redux@5.0.1)
       '@polar-sh/sdk': 0.46.4
-      better-auth: 1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      better-auth: 1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       zod: 4.1.13
     transitivePeerDependencies:
       - '@stripe/react-stripe-js'
@@ -7594,15 +7607,32 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/node@22.19.17':
+    dependencies:
+      undici-types: 6.21.0
+    optional: true
+
   '@types/node@25.5.0':
     dependencies:
       undici-types: 7.18.2
+
+  '@types/node@25.5.2':
+    dependencies:
+      undici-types: 7.18.2
+    optional: true
 
   '@types/pg@8.15.6':
     dependencies:
       '@types/node': 25.5.0
       pg-protocol: 1.10.3
       pg-types: 2.2.0
+
+  '@types/pg@8.20.0':
+    dependencies:
+      '@types/node': 25.5.2
+      pg-protocol: 1.13.0
+      pg-types: 2.2.0
+    optional: true
 
   '@types/react-dom@19.2.3(@types/react@19.2.14)':
     dependencies:
@@ -7930,10 +7960,10 @@ snapshots:
 
   baseline-browser-mapping@2.10.8: {}
 
-  better-auth@1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  better-auth@1.5.5(better-sqlite3@12.5.0)(drizzle-kit@0.31.8)(drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))(mongodb@7.1.0)(next@16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@better-auth/core': 1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0)
-      '@better-auth/drizzle-adapter': 1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))
+      '@better-auth/drizzle-adapter': 1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3))
       '@better-auth/kysely-adapter': 1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(kysely@0.28.12)
       '@better-auth/memory-adapter': 1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)
       '@better-auth/mongo-adapter': 1.5.5(@better-auth/core@1.5.5(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.1)(kysely@0.28.12)(nanostores@1.2.0))(@better-auth/utils@0.3.1)(mongodb@7.1.0)
@@ -7952,7 +7982,7 @@ snapshots:
     optionalDependencies:
       better-sqlite3: 12.5.0
       drizzle-kit: 0.31.8
-      drizzle-orm: 0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3)
+      drizzle-orm: 0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3)
       mongodb: 7.1.0
       next: 16.1.7(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       pg: 8.16.3
@@ -8336,7 +8366,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.7(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3):
+  drizzle-orm@0.45.2(@libsql/client@0.15.15)(@neondatabase/serverless@1.0.2)(@types/better-sqlite3@7.6.13)(@types/pg@8.15.6)(better-sqlite3@12.5.0)(kysely@0.28.12)(pg@8.16.3):
     optionalDependencies:
       '@libsql/client': 0.15.15
       '@neondatabase/serverless': 1.0.2
@@ -9900,6 +9930,9 @@ snapshots:
       pg: 8.16.3
 
   pg-protocol@1.10.3: {}
+
+  pg-protocol@1.13.0:
+    optional: true
 
   pg-types@2.2.0:
     dependencies:
